@@ -11,6 +11,10 @@ body {
     height: 100vh;
     overflow: hidden;
     margin: 0;
+    background-image: url("../assets/images/plateau-siam_x2_345x227_003.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+;
 }
 
 .conteneur {
@@ -22,10 +26,9 @@ body {
 }
 
 .case {
-    width: 50px;
-    height: 50px;
+    width: 116px;
+    height: 116px;
     background-color: #444444;
-    margin: 2px;
     box-shadow: 0 0 2px #000000;
     transition: 1s ease;
 }
@@ -36,6 +39,6 @@ body {
 
 #plateau {
     display: grid;
-    grid-template-columns: repeat(5, 50px);
+    grid-template-columns: repeat(5, 116px);
     gap: 5px;
 }
