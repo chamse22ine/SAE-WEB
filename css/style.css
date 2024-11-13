@@ -14,7 +14,6 @@ body {
     background-image: url("../assets/images/plateau-siam_x2_345x227_003.jpg");
     background-repeat: no-repeat;
     background-position: center;
-;
 }
 
 .conteneur {
@@ -44,5 +43,5 @@ body {
     display: grid;
     grid-template-columns: repeat(5, 116px);
     gap: 5px;
-    
+
 }
