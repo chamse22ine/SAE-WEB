@@ -57,32 +57,28 @@ class GameController {
 
     // Détermine l'angle de rotation en fonction de la direction
     switch (direction) {
-      case "left":
-        this.selectedPiece.orientation = this.selectedPiece.orientation - 90;
+      case 'left':
+        this.selectedPiece.orientation = (this.selectedPiece.orientation - 90);
         break;
-      case "right":
-        this.selectedPiece.orientation = this.selectedPiece.orientation + 90;
+      case 'right':
+        this.selectedPiece.orientation = (this.selectedPiece.orientation + 90);
         break;
-      case "up":
+      case 'up':
         this.selectedPiece.orientation = 0;
         break;
-      case "down":
+      case 'down':
         this.selectedPiece.orientation = 180;
         break;
     }
 
     // Applique la rotation à l'élément de la pièce sélectionnée sur le plateau
-    const pieceElement = this.view.plateauElement.querySelector(
-      `[data-piece-name='${this.selectedPiece.name}']`,
-    );
+    const pieceElement = this.view.plateauElement.querySelector(`[data-piece-name='${this.selectedPiece.name}']`);
     if (pieceElement) {
       pieceElement.style.transform = `rotate(${this.selectedPiece.orientation}deg)`;
     }
 
     console.log(`Pièce ${this.selectedPiece.name} tournée vers ${direction}`);
-    this.ajouterEvenement(
-      `Pièce ${this.selectedPiece.name} tournée vers ${direction}`,
-    );
+    this.ajouterEvenement(`Pièce ${this.selectedPiece.name} tournée vers ${direction}`);
   }
 
   handleBancClick(event, type) {
@@ -101,49 +97,70 @@ class GameController {
       }
     }
   }
+
   handlePlateauClick(event) {
     const target = event.target;
-    if (!this.selectedPiece) {
-      console.log("Aucune pièce sélectionnée");
-      this.ajouterEvenement("Aucune pièce sélectionnée");
-      return;
-    }
 
-    if (target.classList.contains("case")) {
+    if (target.classList.contains('case')) {
       const row = parseInt(target.dataset.row);
       const col = parseInt(target.dataset.col);
+      const clickedPiece = this.model.getPieceAt(row,col)
 
-      // Vérifie si la case est vide
-      if (!this.model.getPieceAt(row, col)) {
-        // Met à jour la position de la pièce dans le modèle
-        this.model.movePiece(this.selectedPiece.name, { row, col });
+      if (clickedPiece && clickedPiece.type.startsWith("rocher")) {
+        console.log("Impossible de sélectionner un rocher")
+        this.ajouterEvenement("Impossible de sélectionner un rocher")
+        return
+      }
 
-        // Supprime la pièce du banc (fonctionne pour les éléphants et les rhinocéros)
-        this.model.removePieceFromBanc(this.selectedPiece.name);
+      // Vérifie si une case contient déjà une pièce
+      const piece = this.model.getPieceAt(row, col);
 
-        // Met à jour l'affichage
-        this.view.renderBoard(this.model.board);
+      if (piece) {
+        // Si une pièce est présente, elle devient la pièce sélectionnée
+        this.selectedPiece = piece;
+        console.log(`Pièce re-sélectionnée : ${piece.name}`);
+        this.ajouterEvenement(`Pièce re-sélectionnée : ${piece.name}`);
+      } else if (this.selectedPiece) {
+        // Si une pièce est déjà sélectionnée et qu'on clique sur une case vide, déplacez la pièce
+        if (!this.model.getPieceAt(row, col)) {
+          // Supprimer la pièce de son ancienne position
+          const previousPosition = this.selectedPiece.position;
+          if (previousPosition) {
+            this.model.removePieceAt(previousPosition.row, previousPosition.col);
+          }
 
-        // Met en évidence la dernière pièce déplacée
-        this.view.highlightLastMovedPiece(this.selectedPiece.name);
+          // Mettre à jour la position dans le modèle
+          this.model.movePiece(this.selectedPiece.name, { row, col });
 
-        // Met à jour l'affichage des bancs
-        this.view.renderElephantsBanc(this.model.bancElephants);
-        this.view.renderRhinocerosBanc(this.model.bancRhinoceros);
+          // Mettre à jour l'affichage du plateau
+          this.view.renderBoard(this.model.board);
 
-        // Ajoute un événement dans l'afficheur
-        this.ajouterEvenement(
-          `Pièce ${this.selectedPiece.name} placée à la position (${row}, ${col})`,
-        );
+          // Mettre à jour les bancs
+          this.view.renderElephantsBanc(this.model.bancElephants)
+          this.view.renderRhinocerosBanc(this.model.bancRhinoceros)
 
-        // Définissez la pièce comme sélectionnée pour permettre la rotation ultérieure
-        this.selectedPiece = this.model.getPieceByName(this.selectedPiece.name);
+          // Mettre en évidence la dernière pièce déplacée
+          this.view.highlightLastMovedPiece(this.selectedPiece.name);
+
+          // Ajouter un événement
+          this.ajouterEvenement(`Pièce ${this.selectedPiece.name} déplacée à la position (${row}, ${col})`);
+
+          // La pièce est maintenant jouée pour ce tour
+          this.pieceDejaPlacee = this.selectedPiece;
+
+          // Optionnel : Désélectionner après le déplacement
+          this.selectedPiece = null;
+        } else {
+          console.log("Case déjà occupée");
+          this.ajouterEvenement("Case déjà occupée");
+        }
       } else {
-        console.log("Case déjà occupée");
-        this.ajouterEvenement("Case déjà occupée");
+        console.log("Aucune pièce sélectionnée pour être déplacée.");
+        this.ajouterEvenement("Aucune pièce sélectionnée pour être déplacée.");
       }
     }
   }
+
 
   terminerTour() {
     if (this.pieceDejaPlacee) {
@@ -152,6 +169,7 @@ class GameController {
         `Tour terminé pour la pièce ${this.pieceDejaPlacee.name}`,
       );
       this.pieceDejaPlacee = null; // Réinitialise la pièce placée
+      this.selectedPiece = null;
     } else {
       console.log("Aucune pièce en jeu à terminer");
       this.ajouterEvenement("Aucune pièce en jeu à terminer");

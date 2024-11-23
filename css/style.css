@@ -54,7 +54,7 @@ body {
 }
 
 .case:hover {
-  background-color: lightblue;
+  background-color: rgba(0, 0, 0, 0.5);
   box-shadow: 0 0 2px #000000;
 }
 
