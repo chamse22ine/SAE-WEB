@@ -17,35 +17,35 @@ class GameController {
   addEventListeners() {
     // Gestion des clics sur le banc des éléphants
     this.view.bancElephantsElement.addEventListener("click", (event) =>
-      this.handleBancClick(event, "elephant"),
+        this.handleBancClick(event, "elephant"),
     );
 
     // Gestion des clics sur le banc des rhinocéros
     this.view.bancRhinocerosElement.addEventListener("click", (event) =>
-      this.handleBancClick(event, "rhinoceros"),
+        this.handleBancClick(event, "rhinoceros"),
     );
 
     // Gestion des clics sur le plateau
     this.view.plateauElement.addEventListener("click", (event) =>
-      this.handlePlateauClick(event),
+        this.handlePlateauClick(event),
     );
 
     // Gestion des clics sur les boutons de direction
     document
-      .getElementById("btn-gauche")
-      .addEventListener("click", () => this.tournerPiece("left"));
+        .getElementById("btn-gauche")
+        .addEventListener("click", () => this.tournerPiece("left"));
     document
-      .getElementById("btn-droite")
-      .addEventListener("click", () => this.tournerPiece("right"));
+        .getElementById("btn-droite")
+        .addEventListener("click", () => this.tournerPiece("right"));
     document
-      .getElementById("btn-haut")
-      .addEventListener("click", () => this.tournerPiece("up"));
+        .getElementById("btn-haut")
+        .addEventListener("click", () => this.tournerPiece("up"));
     document
-      .getElementById("btn-bas")
-      .addEventListener("click", () => this.tournerPiece("down"));
+        .getElementById("btn-bas")
+        .addEventListener("click", () => this.tournerPiece("down"));
     document
-      .getElementById("btn-terminer-tour")
-      .addEventListener("click", () => this.terminerTour());
+        .getElementById("btn-terminer-tour")
+        .addEventListener("click", () => this.terminerTour());
   }
 
   tournerPiece(direction) {
@@ -92,7 +92,7 @@ class GameController {
 
         // Ajoute un événement dans l'afficheur
         this.ajouterEvenement(
-          `Sélection de la pièce : ${this.selectedPiece.name}`,
+            `Sélection de la pièce : ${this.selectedPiece.name}`,
         );
       }
     }
@@ -166,7 +166,7 @@ class GameController {
     if (this.pieceDejaPlacee) {
       console.log(`Tour terminé pour la pièce ${this.pieceDejaPlacee.name}`);
       this.ajouterEvenement(
-        `Tour terminé pour la pièce ${this.pieceDejaPlacee.name}`,
+          `Tour terminé pour la pièce ${this.pieceDejaPlacee.name}`,
       );
       this.pieceDejaPlacee = null; // Réinitialise la pièce placée
       this.selectedPiece = null;
