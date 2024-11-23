@@ -4,6 +4,7 @@ class GameController {
     this.view = view;
     this.selectedPiece = null; // Stocke la pièce sélectionnée
     this.pieceDejaPlacee = null; // Pièce placée pour le tour en cours
+    //Test
 
     // Rendu initial
     this.view.renderBoard(this.model.board);
