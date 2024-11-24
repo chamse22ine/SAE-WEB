@@ -17,6 +17,8 @@ class GameView {
                 if (piece) {
                     caseElement.style.backgroundImage = `url('../assets/images/pieces/${piece.type}.png')`;
                     caseElement.dataset.pieceName = piece.name;
+
+                    caseElement.style.transform = `rotate(${piece.orientation || 0}deg)`;
                 }
 
                 caseElement.dataset.row = row;

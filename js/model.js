@@ -73,9 +73,12 @@ class GameModel {
     movePiece(name, to) {
         const piece = this.getPieceByName(name);
         if (piece) {
-            // Retire la pièce de sa position actuelle si elle en a une
+            // Retire la pièce de sa position actuelle
             if (piece.position) {
                 this.board[piece.position.row][piece.position.col] = null;
+            } else {
+                // Si la pièce est dans un banc, on la retire
+                this.removePieceFromBanc(name);
             }
 
             // Met à jour la position
@@ -83,15 +86,20 @@ class GameModel {
 
             // Place la pièce sur la nouvelle position du plateau
             this.board[to.row][to.col] = piece;
-            this.lastMovedPiece = piece;
         }
     }
     removePieceFromBanc(name) {
-        // Retire la pièce du banc des éléphants
+        // Vérifie et retire la pièce du banc des éléphants
         this.bancElephants = this.bancElephants.filter(piece => piece.name !== name);
 
-        // Retire la pièce du banc des rhinocéros
+        // Vérifie et retire la pièce du banc des rhinocéros
         this.bancRhinoceros = this.bancRhinoceros.filter(piece => piece.name !== name);
+    }
+
+    removePieceAt(row, col) {
+        if(this.board[row][col]) {
+            this.board[row][col] = null;
+        }
     }
 
 
