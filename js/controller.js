@@ -58,32 +58,44 @@ class GameController {
 
         // Détermine l'angle de rotation en fonction de la direction
         switch (direction) {
-            case 'left':
-                this.selectedPiece.orientation = (this.selectedPiece.orientation - 90);
+            case "left":
+                this.selectedPiece.orientation = this.selectedPiece.orientation - 90;
                 break;
-            case 'right':
-                this.selectedPiece.orientation = (this.selectedPiece.orientation + 90);
+            case "right":
+                this.selectedPiece.orientation = this.selectedPiece.orientation + 90;
                 break;
-            case 'up':
+            case "up":
                 this.selectedPiece.orientation = 0;
                 break;
-            case 'down':
+            case "down":
                 this.selectedPiece.orientation = 180;
                 break;
         }
 
         // Applique la rotation à l'élément de la pièce sélectionnée sur le plateau
-        const pieceElement = this.view.plateauElement.querySelector(`[data-piece-name='${this.selectedPiece.name}']`);
+        const pieceElement = this.view.plateauElement.querySelector(
+            `[data-piece-name='${this.selectedPiece.name}']`,
+        );
         if (pieceElement) {
             pieceElement.style.transform = `rotate(${this.selectedPiece.orientation}deg)`;
         }
 
         console.log(`Pièce ${this.selectedPiece.name} tournée vers ${direction}`);
-        this.ajouterEvenement(`Pièce ${this.selectedPiece.name} tournée vers ${direction}`);
+        this.ajouterEvenement(
+            `Pièce ${this.selectedPiece.name} tournée vers ${direction}`,
+        );
     }
 
     handleBancClick(event, type) {
         const target = event.target;
+
+        // Vérifie si c'est bien le tour du joueur
+        if (type !== this.model.getActivePlayer()) {
+            console.log(`Ce n'est pas le tour des ${type}s.`);
+            this.ajouterEvenement(`Ce n'est pas le tour des ${type}s.`);
+            return;
+        }
+
         if (target.classList.contains("case")) {
             const pieceName = target.dataset.pieceName;
             if (pieceName) {
@@ -102,15 +114,15 @@ class GameController {
     handlePlateauClick(event) {
         const target = event.target;
 
-        if (target.classList.contains('case')) {
+        if (target.classList.contains("case")) {
             const row = parseInt(target.dataset.row);
             const col = parseInt(target.dataset.col);
-            const clickedPiece = this.model.getPieceAt(row, col)
+            const clickedPiece = this.model.getPieceAt(row, col);
 
             if (clickedPiece && clickedPiece.type.startsWith("rocher")) {
-                console.log("Impossible de sélectionner un rocher")
-                this.ajouterEvenement("Impossible de sélectionner un rocher")
-                return
+                console.log("Impossible de sélectionner un rocher");
+                this.ajouterEvenement("Impossible de sélectionner un rocher");
+                return;
             }
 
             // Vérifie si une case contient déjà une pièce
@@ -127,7 +139,10 @@ class GameController {
                     // Supprimer la pièce de son ancienne position
                     const previousPosition = this.selectedPiece.position;
                     if (previousPosition) {
-                        this.model.removePieceAt(previousPosition.row, previousPosition.col);
+                        this.model.removePieceAt(
+                            previousPosition.row,
+                            previousPosition.col,
+                        );
                     }
 
                     // Mettre à jour la position dans le modèle
@@ -137,14 +152,16 @@ class GameController {
                     this.view.renderBoard(this.model.board);
 
                     // Mettre à jour les bancs
-                    this.view.renderElephantsBanc(this.model.bancElephants)
-                    this.view.renderRhinocerosBanc(this.model.bancRhinoceros)
+                    this.view.renderElephantsBanc(this.model.bancElephants);
+                    this.view.renderRhinocerosBanc(this.model.bancRhinoceros);
 
                     // Mettre en évidence la dernière pièce déplacée
                     this.view.highlightLastMovedPiece(this.selectedPiece.name);
 
                     // Ajouter un événement
-                    this.ajouterEvenement(`Pièce ${this.selectedPiece.name} déplacée à la position (${row}, ${col})`);
+                    this.ajouterEvenement(
+                        `Pièce ${this.selectedPiece.name} déplacée à la position (${row}, ${col})`,
+                    );
 
                     // La pièce est maintenant jouée pour ce tour
                     this.pieceDejaPlacee = this.selectedPiece;
@@ -165,15 +182,34 @@ class GameController {
 
     terminerTour() {
         if (this.pieceDejaPlacee) {
-            console.log(`Tour terminé pour la pièce ${this.pieceDejaPlacee.name}`);
-            this.ajouterEvenement(
-                `Tour terminé pour la pièce ${this.pieceDejaPlacee.name}`,
+            console.log(
+                `Tour terminé pour ${this.model.getActivePlayer()} avec la pièce ${this.pieceDejaPlacee.name}`,
             );
-            this.pieceDejaPlacee = null; // Réinitialise la pièce placée
+            this.ajouterEvenement(
+                `Tour terminé pour ${this.model.getActivePlayer()} avec la pièce ${this.pieceDejaPlacee.name}`,
+            );
+
+            // Réinitialisation pour le tour suivant
+            this.pieceDejaPlacee = null;
             this.selectedPiece = null;
+
+            // Changer le joueur actif
+            this.model.switchPlayer();
+
+            // Mettre à jour l'interface pour afficher le joueur actif
+            this.view.updateActivePlayer(this.model.getActivePlayer());
+
+            console.log(
+                `C'est maintenant au tour des ${this.model.getActivePlayer()}`,
+            );
+            this.ajouterEvenement(
+                `C'est maintenant au tour des ${this.model.getActivePlayer()}`,
+            );
         } else {
-            console.log("Aucune pièce en jeu à terminer");
-            this.ajouterEvenement("Aucune pièce en jeu à terminer");
+            console.log("Aucune pièce jouée ce tour. Impossible de terminer.");
+            this.ajouterEvenement(
+                "Aucune pièce jouée ce tour. Impossible de terminer.",
+            );
         }
     }
 
