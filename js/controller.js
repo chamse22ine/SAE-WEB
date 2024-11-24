@@ -2,8 +2,9 @@ class GameController {
     constructor(model, view) {
         this.model = model;
         this.view = view;
-        this.selectedPiece = null; // Stocke la pièce sélectionnée
+        this.selectedPiece = null; // Pièce sélectionnée
         this.pieceDejaPlacee = null; // Pièce placée pour le tour en cours
+        this.currentPlayer = "rhino"; // Le joueur Rhino commence
 
         // Rendu initial
         this.view.renderBoard(this.model.board);
@@ -12,7 +13,11 @@ class GameController {
 
         // Attache des gestionnaires d'événements
         this.addEventListeners();
+
+        // Met à jour l'indicateur visuel du joueur actif
+        this.updateJoueurActif();
     }
+
 
     addEventListeners() {
         // Gestion des clics sur le banc des éléphants
@@ -70,59 +75,69 @@ class GameController {
 
     handleBancClick(event, type) {
         const target = event.target;
+
         if (target.classList.contains('case')) {
             const pieceName = target.dataset.pieceName;
             if (pieceName) {
-                // Sélectionne la pièce
-                this.selectedPiece = this.model.getPieceByName(pieceName);
-                console.log(`Pièce sélectionnée : ${this.selectedPiece.name}`);
+                const piece = this.model.getPieceByName(pieceName);
 
-                // Ajoute un événement dans l'afficheur
-                this.ajouterEvenement(`Sélection de la pièce : ${this.selectedPiece.name}`);
+                // Vérifie que la pièce appartient au joueur actif
+                if ((this.currentPlayer === "rhino" && piece.type.startsWith("rhino")) ||
+                    (this.currentPlayer === "éléphant" && piece.type.startsWith("éléphant"))) {
+                    this.selectedPiece = piece; // Met à jour la pièce sélectionnée
+                    console.log(`Pièce sélectionnée : ${this.selectedPiece.name}`);
+                    this.ajouterEvenement(`Sélection de la pièce : ${this.selectedPiece.name}`);
+                } else {
+                    console.log("Ce n'est pas votre tour !");
+                    this.ajouterEvenement("Ce n'est pas votre tour !");
+                }
             }
         }
     }
+
+
+
     handlePlateauClick(event) {
         const target = event.target;
+
         if (!this.selectedPiece) {
             console.log("Aucune pièce sélectionnée");
             this.ajouterEvenement("Aucune pièce sélectionnée");
             return;
         }
 
-        if (target.classList.contains('case')) {
-            const row = parseInt(target.dataset.row);
-            const col = parseInt(target.dataset.col);
+        // Vérifie si la pièce appartient au joueur actif
+        if ((this.currentPlayer === "rhino" && this.selectedPiece.type.startsWith("rhino")) ||
+            (this.currentPlayer === "éléphant" && this.selectedPiece.type.startsWith("éléphant"))) {
+            if (target.classList.contains('case')) {
+                const row = parseInt(target.dataset.row);
+                const col = parseInt(target.dataset.col);
 
-            // Vérifie si la case est vide
-            if (!this.model.getPieceAt(row, col)) {
-                // Met à jour la position de la pièce dans le modèle
-                this.model.movePiece(this.selectedPiece.name, { row, col });
+                // Vérifie si la case est vide
+                if (!this.model.getPieceAt(row, col)) {
+                    this.model.movePiece(this.selectedPiece.name, { row, col });
+                    this.model.removePieceFromBanc(this.selectedPiece.name);
 
-                // Supprime la pièce du banc (fonctionne pour les éléphants et les rhinocéros)
-                this.model.removePieceFromBanc(this.selectedPiece.name);
+                    // Met à jour l'affichage
+                    this.view.renderBoard(this.model.board);
+                    this.view.highlightLastMovedPiece(this.selectedPiece.name);
+                    this.view.renderElephantsBanc(this.model.bancElephants);
+                    this.view.renderRhinocerosBanc(this.model.bancRhinoceros);
 
-                // Met à jour l'affichage
-                this.view.renderBoard(this.model.board);
-
-                // Met en évidence la dernière pièce déplacée
-                this.view.highlightLastMovedPiece(this.selectedPiece.name);
-
-                // Met à jour l'affichage des bancs
-                this.view.renderElephantsBanc(this.model.bancElephants);
-                this.view.renderRhinocerosBanc(this.model.bancRhinoceros);
-
-                // Ajoute un événement dans l'afficheur
-                this.ajouterEvenement(`Pièce ${this.selectedPiece.name} placée à la position (${row}, ${col})`);
-
-                // Définissez la pièce comme sélectionnée pour permettre la rotation ultérieure
-                this.selectedPiece = this.model.getPieceByName(this.selectedPiece.name);
-            } else {
-                console.log("Case déjà occupée");
-                this.ajouterEvenement("Case déjà occupée");
+                    this.ajouterEvenement(`Pièce ${this.selectedPiece.name} placée à la position (${row}, ${col})`);
+                    this.selectedPiece = null;
+                } else {
+                    console.log("Case déjà occupée");
+                    this.ajouterEvenement("Case déjà occupée");
+                }
             }
+        } else {
+            console.log("Ce n'est pas votre tour !");
+            this.ajouterEvenement("Ce n'est pas votre tour !");
         }
     }
+
+
 
     terminerTour() {
         if (this.pieceDejaPlacee) {
@@ -133,6 +148,18 @@ class GameController {
             console.log("Aucune pièce en jeu à terminer");
             this.ajouterEvenement("Aucune pièce en jeu à terminer");
         }
+
+        // Alterne le joueur actif
+        this.currentPlayer = this.currentPlayer === "rhino" ? "elephant" : "rhino";
+        this.ajouterEvenement(`C'est maintenant au tour de ${this.currentPlayer}`);
+
+        // Met à jour l'indicateur visuel
+        this.updateJoueurActif();
+    }
+
+    updateJoueurActif() {
+        const joueurActifElement = document.getElementById('nom-joueur-actif');
+        joueurActifElement.textContent = this.currentPlayer === "rhino" ? "Rhino" : "Elephant";
     }
 
 
