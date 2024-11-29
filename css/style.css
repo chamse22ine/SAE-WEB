@@ -24,6 +24,7 @@ body {
     grid-template-columns: repeat(5, 116px);
     gap: 5px;
 }
+
 #banc-elephants {
     display: flex;
     justify-content: center;
@@ -85,9 +86,15 @@ body {
     transition: background-color 0.3s;
 }
 
+.orientation {
+    height: 25%;
+    width: 30%;
+}
+
 .btn-orientation:hover {
     background-color: #ffa500;
 }
+
 /* Conteneur pour l'afficheur d'événements */
 .afficheur {
     position: absolute;
@@ -119,7 +126,7 @@ body {
     font-size: 14px;
 }
 
-/*test*/
+/* Classes de rotation pour les éléments */
 .rotate-0 {
     transform: rotate(0deg);
 }
