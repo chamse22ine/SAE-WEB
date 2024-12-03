@@ -16,17 +16,26 @@
     <ul id="liste-evenements"></ul> <!-- Liste des événements -->
   </div>
   <div id="joueur-actif" class="indicateur-joueur">
-    Tour de : <span id="nom-joueur-actif">Rhino</span>
+    Tour de : <span id="nom-joueur-actif">Éléphant</span>
   </div>
 
 
   <div id="controle-orientation" class="controle"> <!-- Boutons en dehors du conteneur principal -->
-    <button id="btn-gauche" class="btn-orientation">Regarde à gauche</button>
-    <button id="btn-droite" class="btn-orientation">Regarde à droite</button>
-    <button id="btn-haut" class="btn-orientation">Regarde en haut</button>
-    <button id="btn-bas" class="btn-orientation">Regarde en bas</button>
+    <button id="btn-gauche" class="btn-orientation">
+      <img class="orientation" src="../assets/images/fleches/arrow_left.png" alt="arrow_left" />
+    </button>
+    <button id="btn-droite" class="btn-orientation">
+      <img class="orientation" src="../assets/images/fleches/arrow_right.png" alt="arrow_right" />
+    </button>
+    <button id="btn-haut" class="btn-orientation">
+      <img class="orientation" src="../assets/images/fleches/arrow_upward.png" alt="arrow_upward"/>
+    </button>
+    <button id="btn-bas" class="btn-orientation">
+      <img class="orientation" src="../assets/images/fleches/arrow_downward.png" alt="arrow_forward" />
+    </button>
     <button id="btn-terminer-tour" class="btn-orientation">Terminer mon tour</button>
   </div>
+
 
   <div id="conteneur">
     <div id="banc-elephants" class="conteneur"></div> <!-- Banc pour les éléphants -->
