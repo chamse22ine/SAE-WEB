@@ -118,4 +118,7 @@ class GameModel {
       this.board[row][col] = null;
     }
   }
+
+  
+
 }

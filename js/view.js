@@ -3,6 +3,11 @@ class GameView {
         this.plateauElement = document.getElementById("plateau");
         this.bancElephantsElement = document.getElementById("banc-elephants");
         this.bancRhinocerosElement = document.getElementById("banc-rhinoceros");
+        this.activePlayerElement = document.getElementById("nom-joueur-actif")
+    }
+
+    updateActivePlayer(player) {
+        this.activePlayerElement.textContent = player === "elephant" ? "Éléphant" : "Rhinocéros";
     }
 
     renderBoard(board) {
@@ -67,6 +72,8 @@ class GameView {
             newHighlight.classList.add('highlight');
         }
     }
+
+
 
 
 }

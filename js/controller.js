@@ -197,7 +197,8 @@ class GameController {
             this.model.switchPlayer();
 
             // Mettre à jour l'interface pour afficher le joueur actif
-            this.view.updateActivePlayer(this.model.getActivePlayer());
+            const activePlayer = this.model.getActivePlayer()
+            this.view.updateActivePlayer(activePlayer);
 
             console.log(
                 `C'est maintenant au tour des ${this.model.getActivePlayer()}`,
