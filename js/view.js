@@ -6,8 +6,7 @@ class GameView {
     }
 
     renderBoard(board) {
-        this.plateauElement.innerHTML = ""; // Vide le plateau
-
+        this.plateauElement.innerHTML = "";
         for (let row = 0; row < 5; row++) {
             for (let col = 0; col < 5; col++) {
                 const caseElement = document.createElement("div");
@@ -17,7 +16,6 @@ class GameView {
                 if (piece) {
                     caseElement.style.backgroundImage = `url('../assets/images/pieces/${piece.type}.png')`;
                     caseElement.dataset.pieceName = piece.name;
-
                     caseElement.style.transform = `rotate(${piece.orientation || 0}deg)`;
                 }
 
@@ -30,7 +28,7 @@ class GameView {
     }
 
     renderElephantsBanc(bancElephants) {
-        this.bancElephantsElement.innerHTML = ""; // Vide le banc des éléphants
+        this.bancElephantsElement.innerHTML = "";
 
         bancElephants.forEach(elephant => {
             const caseElement = document.createElement("div");
@@ -43,7 +41,7 @@ class GameView {
     }
 
     renderRhinocerosBanc(bancRhinoceros) {
-        this.bancRhinocerosElement.innerHTML = ""; // Vide le banc des rhinocéros
+        this.bancRhinocerosElement.innerHTML = "";
 
         bancRhinoceros.forEach(rhinoceros => {
             const caseElement = document.createElement("div");
@@ -55,13 +53,10 @@ class GameView {
         });
     }
     highlightLastMovedPiece(pieceName) {
-        // Supprime l'ancienne mise en évidence
         const previousHighlight = this.plateauElement.querySelector('.highlight');
         if (previousHighlight) {
             previousHighlight.classList.remove('highlight');
         }
-
-        // Met en évidence la nouvelle pièce
         const newHighlight = this.plateauElement.querySelector(`[data-piece-name='${pieceName}']`);
         if (newHighlight) {
             newHighlight.classList.add('highlight');
