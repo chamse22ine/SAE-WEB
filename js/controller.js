@@ -141,10 +141,6 @@ class GameController {
     }
 
     terminerTour() {
-        if (this.currentAction !== "end") {
-            this.ajouterEvenement("Vous devez terminer toutes les actions avant de terminer le tour.");
-            return;
-        }
 
         this.ajouterEvenement(`Tour terminé pour ${this.model.getActivePlayer()}.`);
         this.model.incrementTurn();
