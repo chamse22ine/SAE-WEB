@@ -1,32 +1,29 @@
 class Piece {
   constructor(name, type, player, position, orientation = 0) {
-    this.name = name; // Nom unique (ex. "elephant1", "rhinoceros3")
-    this.type = type; // Type de la pièce (ex. "elephant", "rhinoceros", "rocher")
-    this.player = player; // Joueur propriétaire (ex. "player1", null pour les montagnes)
-    this.position = position; // Position actuelle { row: x, col: y }
-    this.orientation = orientation; // Ajout de l'orientation initiale (0°)
+    this.name = name;
+    this.type = type;
+    this.player = player;
+    this.position = position;
+    this.orientation = orientation;
   }
 }
 
 class GameModel {
   constructor() {
-    this.pieces = this.initializePieces(); // Liste de toutes les pièces
-    this.board = this.initializeBoard(); // Plateau contenant les références aux pièces
-    this.bancElephants = this.initializeElephantsBanc(); // Liste des éléphants sur le banc
-    this.bancRhinoceros = this.initializeRhinocerosBanc(); // Liste des rhinocéros sur le banc
+    this.turnCount = 1;
+    this.pieces = this.initializePieces();
+    this.board = this.initializeBoard();
+    this.bancElephants = this.initializeElephantsBanc();
+    this.bancRhinoceros = this.initializeRhinocerosBanc();
     this.currentPlayer = "elephant";
-    this.reserve = { player1: 5, player2: 5 }; // Réserve par joueur
     this.lastMovedPiece = null;
-    this.gameOver = false;
   }
 
   initializePieces() {
     return [
-      // Montagnes au centre du plateau
       new Piece("rocher 1", "rocher_1", null, { row: 2, col: 1 }),
       new Piece("rocher 2", "rocher_2", null, { row: 2, col: 2 }),
       new Piece("rocher 3", "rocher_3", null, { row: 2, col: 3 }),
-      // Aucun rhinocéros directement sur le plateau
     ];
   }
   initializeElephantsBanc() {
@@ -83,31 +80,29 @@ class GameModel {
     );
   }
 
+  incrementTurn() {
+    this.turnCount += 1;
+  }
+
   movePiece(name, to) {
     const piece = this.getPieceByName(name);
     if (piece) {
-      // Retire la pièce de sa position actuelle
       if (piece.position) {
         this.board[piece.position.row][piece.position.col] = null;
       } else {
-        // Si la pièce est dans un banc, on la retire
         this.removePieceFromBanc(name);
       }
-
-      // Met à jour la position
       piece.position = to;
-
-      // Place la pièce sur la nouvelle position du plateau
       this.board[to.row][to.col] = piece;
+      console.log(`Pièce ${piece.name} déplacée à (${to.row}, ${to.col})`);
     }
   }
+
   removePieceFromBanc(name) {
-    // Vérifie et retire la pièce du banc des éléphants
     this.bancElephants = this.bancElephants.filter(
       (piece) => piece.name !== name,
     );
 
-    // Vérifie et retire la pièce du banc des rhinocéros
     this.bancRhinoceros = this.bancRhinoceros.filter(
       (piece) => piece.name !== name,
     );
@@ -119,6 +114,12 @@ class GameModel {
     }
   }
 
-  
+  isEntryAllowed(row, col) {
+    if (this.turnCount <= 2 && ((row === 0 && col === 2) || (row === 4 && col === 2))) {
+      return false;
+    }
+    return !this.getPieceAt(row, col);
+  }
+
 
 }
