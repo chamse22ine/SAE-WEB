@@ -16,9 +16,8 @@ class GameView {
                 const piece = board[row][col];
                 if (piece) {
                     caseElement.style.backgroundImage = `url('../assets/images/pieces/${piece.type}.png')`;
-                    caseElement.dataset.pieceName = piece.name;
-
                     caseElement.style.transform = `rotate(${piece.orientation || 0}deg)`;
+                    caseElement.dataset.pieceName = piece.name;
                 }
 
                 caseElement.dataset.row = row;
@@ -28,6 +27,7 @@ class GameView {
             }
         }
     }
+
 
     renderElephantsBanc(bancElephants) {
         this.bancElephantsElement.innerHTML = ""; // Vide le banc des éléphants
