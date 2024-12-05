@@ -69,11 +69,6 @@ class GameController {
     }
 
     tournerPiece(direction) {
-        if (this.currentAction !== "orient") {
-            this.ajouterEvenement("Vous devez poser une pièce avant de choisir son orientation.");
-            return;
-        }
-
         if (!this.selectedPiece) {
             this.ajouterEvenement("Aucune pièce sélectionnée pour tourner.");
             return;
@@ -81,10 +76,10 @@ class GameController {
 
         switch (direction) {
             case "gauche":
-                this.selectedPiece.orientation = -90;
+                this.selectedPiece.orientation -= 90;
                 break;
             case "droite":
-                this.selectedPiece.orientation = 90;
+                this.selectedPiece.orientation += 90;
                 break;
             case "haut":
                 this.selectedPiece.orientation = 0;
@@ -141,16 +136,11 @@ class GameController {
                 this.view.renderRhinocerosBanc(this.model.bancRhinoceros);
                 this.view.highlightLastMovedPiece(this.selectedPiece.name);
                 this.ajouterEvenement(`Pièce ${this.selectedPiece.name} placée sur le plateau.`);
-                this.currentAction = "orient";
             }
         }
     }
 
     terminerTour() {
-        if (this.currentAction !== "end") {
-            this.ajouterEvenement("Vous devez terminer toutes les actions avant de terminer le tour.");
-            return;
-        }
 
         this.ajouterEvenement(`Tour terminé pour ${this.model.getActivePlayer()}.`);
         this.model.incrementTurn();
