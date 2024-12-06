@@ -1,141 +1,149 @@
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body {
-    color: #ffffff;
-    background-color: #000000;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
+  color: #ffffff;
+  background-color: #000000;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
 
 #conteneur {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-image: url("../assets/images/plateau-siam_x2_345x227_003.jpg");
-    background-repeat: no-repeat;
-    background-position: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-image: url("../assets/images/plateau-siam_x2_345x227_003.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 #plateau {
-    display: grid;
-    grid-template-columns: repeat(5, 116px);
-    gap: 5px;
+  display: grid;
+  grid-template-columns: repeat(5, 116px);
+  gap: 5px;
 }
 
 #banc-elephants {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    max-width: 550px;
-    min-height: 120px; /* Définit une hauteur minimale pour que le banc reste visible */
-    border: 1px solid rgba(255, 255, 255, 0.2); /* Optionnel : bordure pour indiquer l'espace */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 550px;
+  min-height: 120px; /* Définit une hauteur minimale pour que le banc reste visible */
+  border: 1px solid rgba(255, 255, 255, 0.2); /* Optionnel : bordure pour indiquer l'espace */
 }
 
 #banc-rhinoceros {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    max-width: 550px;
-    min-height: 120px; /* Définit une hauteur minimale pour que le banc reste visible */
-    border: 1px solid rgba(255, 255, 255, 0.2); /* Optionnel : bordure pour indiquer l'espace */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 550px;
+  min-height: 120px; /* Définit une hauteur minimale pour que le banc reste visible */
+  border: 1px solid rgba(255, 255, 255, 0.2); /* Optionnel : bordure pour indiquer l'espace */
 }
 
 /* Style des cases (pour le banc et le plateau) */
 .case {
-    width: 116px;
-    height: 116px;
-    background-size: 80% auto;
-    background-repeat: no-repeat;
-    background-position: center;
-    transition: background-color 0.3s ease, transform 0.3s ease; /* Ajoute une transition pour la rotation */
-    transform-origin: center; /* Définit l'origine de la rotation au centre de la case */
+  width: 116px;
+  height: 116px;
+  background-size: 80% auto;
+  background-repeat: no-repeat;
+  background-position: center;
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Ajoute une transition pour la rotation */
+  transform-origin: center; /* Définit l'origine de la rotation au centre de la case */
 }
 
 .case:hover {
-    background-color: lightblue;
-    box-shadow: 0 0 2px #000000;
+  background-color: lightblue;
+  box-shadow: 0 0 2px #000000;
 }
 
 .highlight {
-    border: 3px solid yellow; /* Ajoute une bordure jaune pour mettre en évidence */
-    box-shadow: 0 0 10px rgba(255, 255, 0, 0.7); /* Ajoute un effet lumineux */
+  border: 3px solid yellow; /* Ajoute une bordure jaune pour mettre en évidence */
+  box-shadow: 0 0 10px rgba(255, 255, 0, 0.7); /* Ajoute un effet lumineux */
 }
 
 /* Positionne les boutons juste au-dessus du plateau */
 .controle {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    padding: 10px;
-    background-color: rgba(0, 0, 0, 0.7); /* Fond semi-transparent */
-    border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.7); /* Fond semi-transparent */
+  border-radius: 8px;
 }
 
 .btn-orientation {
-    padding: 10px 15px;
-    cursor: pointer;
-    border: none;
-    border-radius: 5px;
-    background-color: #ffcc00;
-    color: #000;
-    font-weight: bold;
-    transition: background-color 0.3s;
+  padding: 10px 15px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  background-color: #ffcc00;
+  color: #000;
+  font-weight: bold;
+  transition: background-color 0.3s;
 }
 
 .orientation {
-    height: 25%;
-    width: 30%;
+  height: 25%;
+  width: 30%;
 }
 
 .btn-orientation:hover {
-    background-color: #ffa500;
+  background-color: #ffa500;
 }
 
 /* Conteneur pour l'afficheur d'événements */
 .afficheur {
-    position: absolute;
-    top: 100px;
-    right: 10px; /* Place le conteneur à droite */
-    width: 200px;
-    height: 80vh;
-    overflow-y: auto;
-    background-color: rgba(255, 255, 255, 0.1);
-    color: #ffffff;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+  position: absolute;
+  top: 100px;
+  right: 10px; /* Place le conteneur à droite */
+  width: 200px;
+  height: 80vh;
+  overflow-y: auto;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .afficheur h3 {
-    margin: 0 0 10px;
-    font-size: 16px;
+  margin: 0 0 10px;
+  font-size: 16px;
 }
 
 .afficheur ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
 }
 
 .afficheur li {
-    margin-bottom: 5px;
-    font-size: 14px;
+  margin-bottom: 5px;
+  font-size: 14px;
 }
 
-/* Classes de rotation pour les éléments */
 .rotate-0 {
-    transform: rotate(0deg);
+  transform: rotate(0deg);
 }
 .rotate-90 {
-    transform: rotate(90deg);
+  transform: rotate(90deg);
 }
 .rotate-180 {
-    transform: rotate(180deg);
+  transform: rotate(180deg);
 }
 .rotate-270 {
-    transform: rotate(270deg);
+  transform: rotate(270deg);
+}
+
+.arrow {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  z-index: 1;
 }

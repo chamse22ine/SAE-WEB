@@ -8,33 +8,71 @@ class GameView {
 
     renderBoard(board) {
         this.plateauElement.innerHTML = "";
+
         for (let row = 0; row < 5; row++) {
             for (let col = 0; col < 5; col++) {
                 const caseElement = document.createElement("div");
                 caseElement.classList.add("case");
 
                 const piece = board[row][col];
+
                 if (piece) {
                     caseElement.style.backgroundImage = `url('../assets/images/pieces/${piece.type}.png')`;
-                    caseElement.dataset.pieceName = piece.name;
+                    caseElement.dataset.pieceName = piece.name || "";
                     caseElement.style.transform = `rotate(${piece.orientation || 0}deg)`;
-                    caseElement.dataset.pieceName = piece.name;
-                }
 
-                if(!this.model.isEntryAllowed(row, col)) {
-                    const croixElement = document.createElement("div");
-                    croixElement.classList.add("croix");
-                    croixElement.style.backgroundImage = `url('../assets/images/fleches/croix.png')`;
-                    caseElement.appendChild(croixElement);
+                    if (row === 0) {
+                        this.addArrow(caseElement, "top");
+                    }
+                    if (row === 4) {
+                        this.addArrow(caseElement, "bottom");
+                    }
+                    if (col === 0) {
+                        this.addArrow(caseElement, "left");
+                    }
+                    if (col === 4) {
+                        this.addArrow(caseElement, "right");
+                    }
+                } else if (!this.model.isEntryAllowed(row, col)) {
+                    caseElement.style.backgroundImage = `url('../assets/images/fleches/croix.png')`;
+                    caseElement.classList.add("case-interdite");
                 }
-
                 caseElement.dataset.row = row;
                 caseElement.dataset.col = col;
-
                 this.plateauElement.appendChild(caseElement);
-
             }
         }
+    }
+
+    addArrow(caseElement, direction) {
+        const arrowElement = document.createElement("div");
+        arrowElement.classList.add("arrow");
+        arrowElement.style.backgroundImage = "url('../assets/images/fleches/arrow_push.png')";
+
+        switch (direction) {
+            case "top":
+                arrowElement.style.top = "-10px";
+                arrowElement.style.left = "50%";
+                arrowElement.style.transform = "translate(-50%, -50%) rotate(90deg)";
+                break;
+            case "bottom":
+                arrowElement.style.bottom = "10px";
+                arrowElement.style.left = "50%";
+                arrowElement.style.transform = "translate(-50%, 50%) rotate(-90deg)";
+                break;
+            case "left":
+                arrowElement.style.top = "50%";
+                arrowElement.style.left = "-10px";
+                break;
+            case "right":
+                arrowElement.style.top = "50%";
+                arrowElement.style.right = "-10px";
+                arrowElement.style.transform = "translate(50%, -50%) rotate(-180deg)";
+                break;
+            default:
+                break;
+        }
+        caseElement.appendChild(arrowElement);
     }
 
 

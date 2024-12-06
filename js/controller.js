@@ -36,7 +36,117 @@ class GameController {
         document
             .getElementById("btn-terminer-tour")
             .addEventListener("click", () => this.terminerTour());
+        this.view.plateauElement.addEventListener("click", (event) => {
+            if (event.target.classList.contains("arrow")) {
+                this.handleArrowClick(event);
+            }
+        });
     }
+
+    addArrow(caseElement, direction) {
+        const arrowElement = document.createElement("div");
+        arrowElement.classList.add("arrow");
+        arrowElement.style.backgroundImage = "url('../assets/images/fleches/arrow_push.png')";
+        arrowElement.dataset.direction = direction;
+
+        switch (direction) {
+            case "top":
+                arrowElement.style.top = "-10px";
+                arrowElement.style.left = "50%";
+                arrowElement.style.transform = "translate(-50%, -50%) rotate(90deg)";
+                break;
+            case "bottom":
+                arrowElement.style.bottom = "10px";
+                arrowElement.style.left = "50%";
+                arrowElement.style.transform = "translate(-50%, 50%) rotate(-90deg)";
+                break;
+            case "left":
+                arrowElement.style.top = "50%";
+                arrowElement.style.left = "-10px";
+                arrowElement.style.transform = "translate(-50%, -50%) rotate(0deg)";
+                break;
+            case "right":
+                arrowElement.style.top = "50%";
+                arrowElement.style.right = "-10px";
+                arrowElement.style.transform = "translate(50%, -50%) rotate(180deg)";
+                break;
+        }
+
+        caseElement.appendChild(arrowElement);
+    }
+
+
+    handleArrowClick(event) {
+        if (!this.selectedPiece) {
+            this.ajouterEvenement("Sélectionnez une pièce avant d'utiliser une flèche.");
+            return;
+        }
+
+        const arrowElement = event.target;
+        const direction = arrowElement.dataset.direction;
+        const caseElement = arrowElement.parentElement;
+        const row = parseInt(caseElement.dataset.row);
+        const col = parseInt(caseElement.dataset.col);
+
+        let newRow = row;
+        let newCol = col;
+
+        switch (direction) {
+            case "top":
+                newRow = row - 1;
+                break;
+            case "bottom":
+                newRow = row + 1;
+                break;
+            case "left":
+                newCol = col - 1;
+                break;
+            case "right":
+                newCol = col + 1;
+                break;
+        }
+
+        if (newRow < 0 || newRow >= 5 || newCol < 0 || newCol >= 5) {
+            this.ajouterEvenement("Impossible de pousser en dehors du plateau.");
+            return;
+        }
+
+        let currentRow = newRow;
+        let currentCol = newCol;
+        let pushedPiece = this.model.getPieceAt(currentRow, currentCol);
+
+        while (pushedPiece) {
+            const nextRow = currentRow + (currentRow - row);
+            const nextCol = currentCol + (currentCol - col);
+
+            // Vérifier si la position suivante est valide
+            if (nextRow < 0 || nextRow >= 5 || nextCol < 0 || nextCol >= 5) {
+                this.ajouterEvenement("La pièce poussée ne peut pas sortir du plateau.");
+                return;
+            }
+
+            // Déplacer la pièce poussée vers la position suivante
+            this.model.movePiece(pushedPiece.name, { row: nextRow, col: nextCol });
+
+            // Mettre à jour la position actuelle pour continuer la poussée
+            currentRow = nextRow;
+            currentCol = nextCol;
+            pushedPiece = this.model.getPieceAt(currentRow, currentCol);
+        }
+
+        // Placer la pièce sélectionnée sur la case d'origine
+        this.model.movePiece(this.selectedPiece.name, { row: newRow, col: newCol });
+
+        // Rafraîchir le plateau
+        this.view.renderBoard(this.model.board);
+        this.view.renderElephantsBanc(this.model.bancElephants);
+        this.view.renderRhinocerosBanc(this.model.bancRhinoceros);
+
+        this.ajouterEvenement(`Pièce ${this.selectedPiece.name} placée et poussée en ${direction}.`);
+        this.selectedPiece = null; // Réinitialiser la sélection
+    }
+
+
 
     ajouterEvenement(message) {
         const listeEvenements = document.getElementById("liste-evenements");
@@ -158,6 +268,6 @@ class GameController {
 
 document.addEventListener("DOMContentLoaded", () => {
     const model = new GameModel();
-    const view = new GameView();
+    const view = new GameView(model);
     const controller = new GameController(model, view);
 });

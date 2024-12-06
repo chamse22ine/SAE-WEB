@@ -74,9 +74,9 @@ class GameModel {
   }
   getPieceByName(name) {
     return (
-        this.pieces.find((piece) => piece.name === name) ||
-        this.bancRhinoceros.find((piece) => piece.name === name) ||
-        this.bancElephants.find((piece) => piece.name === name)
+      this.pieces.find((piece) => piece.name === name) ||
+      this.bancRhinoceros.find((piece) => piece.name === name) ||
+      this.bancElephants.find((piece) => piece.name === name)
     );
   }
 
@@ -116,14 +116,12 @@ class GameModel {
   }
 
   isEntryAllowed(row, col) {
-    // Bloque l'entrée dans les zones interdites pour les premiers tours
     if (
-        this.turnCount <= 2 &&
-        ((row === 0 && col === 2) || (row === 4 && col === 2))
+      this.turnCount < 2 &&
+      ((row === 0 && col === 2) || (row === 4 && col === 2))
     ) {
       return false;
     }
-    // Bloque l'entrée si une pièce est déjà présente sur la case
     return !this.getPieceAt(row, col);
   }
 
