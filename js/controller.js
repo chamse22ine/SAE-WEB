@@ -68,6 +68,7 @@ class GameController {
         }
     }
 
+
     tournerPiece(direction) {
         if (!this.selectedPiece) {
             this.ajouterEvenement("Aucune pièce sélectionnée pour tourner.");

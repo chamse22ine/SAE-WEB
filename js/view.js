@@ -66,4 +66,33 @@ class GameView {
     }
 
 
+    renderArrows(piecePosition) {
+        const { row, col } = piecePosition;
+
+        // Vérifier les limites du plateau pour chaque direction
+        if (row > 0) {
+            this.addArrow(row - 1, col, 'top');
+        }
+        if (row < 4) {
+            this.addArrow(row + 1, col, 'bottom');
+        }
+        if (col > 0) {
+            this.addArrow(row, col - 1, 'left');
+        }
+        if (col < 4) {
+            this.addArrow(row, col + 1, 'right');
+        }
+    }
+
+    addArrow(row, col, direction) {
+        const cell = this.plateauElement.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+        if (cell) {
+            const arrow = document.createElement('button');
+            arrow.classList.add('arrow', direction);
+            arrow.style.backgroundImage = "url('../assets/images/fleches/arrow_push.png')";
+            arrow.dataset.direction = direction;
+            cell.appendChild(arrow);
+        }
+    }
+
 }
