@@ -137,6 +137,8 @@ class GameController {
                 this.view.highlightLastMovedPiece(this.selectedPiece.name);
                 this.ajouterEvenement(`Pièce ${this.selectedPiece.name} placée sur le plateau.`);
             }
+
+
         }
     }
 

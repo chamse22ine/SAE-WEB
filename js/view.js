@@ -1,8 +1,9 @@
 class GameView {
-    constructor() {
+    constructor(model) {
         this.plateauElement = document.getElementById("plateau");
         this.bancElephantsElement = document.getElementById("banc-elephants");
         this.bancRhinocerosElement = document.getElementById("banc-rhinoceros");
+        this.model = model;
     }
 
     renderBoard(board) {
@@ -20,10 +21,18 @@ class GameView {
                     caseElement.dataset.pieceName = piece.name;
                 }
 
+                if(!this.model.isEntryAllowed(row, col)) {
+                    const croixElement = document.createElement("div");
+                    croixElement.classList.add("croix");
+                    croixElement.style.backgroundImage = `url('../assets/images/fleches/croix.png')`;
+                    caseElement.appendChild(croixElement);
+                }
+
                 caseElement.dataset.row = row;
                 caseElement.dataset.col = col;
 
                 this.plateauElement.appendChild(caseElement);
+
             }
         }
     }
