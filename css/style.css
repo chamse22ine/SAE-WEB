@@ -147,3 +147,70 @@ body {
   background-repeat: no-repeat;
   z-index: 1;
 }
+
+
+/* Animation de poussée */
+@keyframes push-top {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes push-bottom {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(20px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes push-left {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-20px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes push-right {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(20px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* Classes pour animer les pièces */
+.push-top {
+  animation: push-top 0.5s ease-in-out;
+}
+
+.push-bottom {
+  animation: push-bottom 0.5s ease-in-out;
+}
+
+.push-left {
+  animation: push-left 0.5s ease-in-out;
+}
+
+.push-right {
+  animation: push-right 0.5s ease-in-out;
+}

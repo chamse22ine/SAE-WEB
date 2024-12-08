@@ -6,13 +6,19 @@ class GameView {
         this.model = model;
     }
 
+    // Affiche l'état du plateau
     renderBoard(board) {
+        console.log("Rendu de l'état du plateau :", board);
+
+        // Réinitialise l'affichage du plateau
         this.plateauElement.innerHTML = "";
 
         for (let row = 0; row < 5; row++) {
             for (let col = 0; col < 5; col++) {
                 const caseElement = document.createElement("div");
                 caseElement.classList.add("case");
+                caseElement.dataset.row = row;
+                caseElement.dataset.col = col;
 
                 const piece = board[row][col];
 
@@ -20,62 +26,61 @@ class GameView {
                     caseElement.style.backgroundImage = `url('../assets/images/pieces/${piece.type}.png')`;
                     caseElement.dataset.pieceName = piece.name || "";
                     caseElement.style.transform = `rotate(${piece.orientation || 0}deg)`;
-
-                    if (row === 0) {
-                        this.addArrow(caseElement, "top");
-                    }
-                    if (row === 4) {
-                        this.addArrow(caseElement, "bottom");
-                    }
-                    if (col === 0) {
-                        this.addArrow(caseElement, "left");
-                    }
-                    if (col === 4) {
-                        this.addArrow(caseElement, "right");
-                    }
                 } else if (!this.model.isEntryAllowed(row, col)) {
                     caseElement.style.backgroundImage = `url('../assets/images/fleches/croix.png')`;
                     caseElement.classList.add("case-interdite");
                 }
-                caseElement.dataset.row = row;
-                caseElement.dataset.col = col;
+
+                // Ajout des flèches sur les bords
+                if (row === 0) this.addArrow(caseElement, "haut");
+                if (row === 4) this.addArrow(caseElement, "bas");
+                if (col === 0) this.addArrow(caseElement, "gauche");
+                if (col === 4) this.addArrow(caseElement, "droite");
+
                 this.plateauElement.appendChild(caseElement);
             }
         }
+        console.log("Plateau rendu avec succès.");
     }
 
+    showMessage(message) {
+        console.log(message)
+    }
+
+    // Ajoute une flèche à une case
     addArrow(caseElement, direction) {
         const arrowElement = document.createElement("div");
         arrowElement.classList.add("arrow");
         arrowElement.style.backgroundImage = "url('../assets/images/fleches/arrow_push.png')";
+        arrowElement.dataset.direction = direction;
 
+        // Position de la flèche
         switch (direction) {
-            case "top":
+            case "haut":
                 arrowElement.style.top = "-10px";
                 arrowElement.style.left = "50%";
                 arrowElement.style.transform = "translate(-50%, -50%) rotate(90deg)";
                 break;
-            case "bottom":
+            case "bas":
                 arrowElement.style.bottom = "10px";
                 arrowElement.style.left = "50%";
                 arrowElement.style.transform = "translate(-50%, 50%) rotate(-90deg)";
                 break;
-            case "left":
+            case "gauche":
                 arrowElement.style.top = "50%";
                 arrowElement.style.left = "-10px";
+                arrowElement.style.transform = "translate(-50%, -50%) rotate(0deg)";
                 break;
-            case "right":
+            case "droite":
                 arrowElement.style.top = "50%";
                 arrowElement.style.right = "-10px";
-                arrowElement.style.transform = "translate(50%, -50%) rotate(-180deg)";
-                break;
-            default:
+                arrowElement.style.transform = "translate(50%, -50%) rotate(180deg)";
                 break;
         }
         caseElement.appendChild(arrowElement);
     }
 
-
+    // Affiche les pièces dans le banc des éléphants
     renderElephantsBanc(bancElephants) {
         this.bancElephantsElement.innerHTML = "";
 
@@ -89,6 +94,7 @@ class GameView {
         });
     }
 
+    // Affiche les pièces dans le banc des rhinocéros
     renderRhinocerosBanc(bancRhinoceros) {
         this.bancRhinocerosElement.innerHTML = "";
 
@@ -101,6 +107,8 @@ class GameView {
             this.bancRhinocerosElement.appendChild(caseElement);
         });
     }
+
+    // Met en surbrillance la dernière pièce déplacée
     highlightLastMovedPiece(pieceName) {
         const previousHighlight = this.plateauElement.querySelector('.highlight');
         if (previousHighlight) {
@@ -111,6 +119,4 @@ class GameView {
             newHighlight.classList.add('highlight');
         }
     }
-
-
 }
