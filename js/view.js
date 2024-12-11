@@ -122,28 +122,17 @@ class GameView {
     }
 
     renderPieceRotation(piece) {
-        // Ajout d'un contrôle pour s'assurer que l'élément du banc existe avant de l'utiliser
         if (this.bancElephantsElement) {
             const pieceElement = this.bancElephantsElement.querySelector(`[data-piece-name='${piece.name}']`);
             if (pieceElement) {
                 pieceElement.style.transform = `rotate(${piece.orientation}deg)`;
-            } else {
-                console.error(`Pièce ${piece.name} non trouvée dans le banc des éléphants.`);
             }
-        } else {
-            console.error("Le banc des éléphants n'a pas été trouvé.");
         }
-
-        // On peut aussi vérifier pour le banc des rhinocéros de la même manière
         if (this.bancRhinocerosElement) {
             const pieceElementRhinoceros = this.bancRhinocerosElement.querySelector(`[data-piece-name='${piece.name}']`);
             if (pieceElementRhinoceros) {
                 pieceElementRhinoceros.style.transform = `rotate(${piece.orientation}deg)`;
-            } else {
-                console.error(`Pièce ${piece.name} non trouvée dans le banc des rhinocéros.`);
             }
-        } else {
-            console.error("Le banc des rhinocéros n'a pas été trouvé.");
         }
     }
 }
