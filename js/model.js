@@ -21,11 +21,12 @@ class GameModel {
 
   initializePieces() {
     return [
-      new Piece("rocher 1", "rocher_1", null, { row: 2, col: 1 }),
-      new Piece("rocher 2", "rocher_2", null, { row: 2, col: 2 }),
-      new Piece("rocher 3", "rocher_3", null, { row: 2, col: 3 }),
+      new Piece("rocher 1", "rocher_1", null, {row: 2, col: 1}),
+      new Piece("rocher 2", "rocher_2", null, {row: 2, col: 2}),
+      new Piece("rocher 3", "rocher_3", null, {row: 2, col: 3}),
     ];
   }
+
   initializeElephantsBanc() {
     return [
       new Piece("elephant 1", "éléphant_1", "player1", null),
@@ -47,7 +48,7 @@ class GameModel {
   }
 
   initializeBoard() {
-    const board = Array.from({ length: 5 }, () => Array(5).fill(null));
+    const board = Array.from({length: 5}, () => Array(5).fill(null));
     this.pieces.forEach((piece) => {
       if (piece.position) {
         board[piece.position.row][piece.position.col] = piece;
@@ -61,7 +62,7 @@ class GameModel {
     for (let row = 0; row < this.board.length; row++) {
       for (let col = 0; col < this.board[row].length; col++) {
         if (this.board[row][col] && this.board[row][col].type.startsWith('rocher')) {
-          return { row, col };
+          return {row, col};
         }
       }
     }
@@ -71,10 +72,10 @@ class GameModel {
   moveRock() {
     let rockPos = this.findRock();
     if (rockPos) {
-      let { row, col } = rockPos;
+      let {row, col} = rockPos;
       if (col < this.board[0].length - 1 && this.board[row][col + 1] === null) {
         // Déplacer le rocher
-        this.board[row][col + 1] = { type: 'rocher' };
+        this.board[row][col + 1] = {type: 'rocher'};
         this.board[row][col] = null;
         return true;
       } else {
@@ -87,7 +88,7 @@ class GameModel {
 
   switchPlayer() {
     this.currentPlayer =
-      this.currentPlayer === "elephant" ? "rhinoceros" : "elephant";
+        this.currentPlayer === "elephant" ? "rhinoceros" : "elephant";
   }
 
   getActivePlayer() {
@@ -101,6 +102,7 @@ class GameModel {
   getPieceAt(row, col) {
     return this.board[row][col];
   }
+
   getPieceByName(name) {
     return (
         this.pieces.find((piece) => piece.name === name) ||
@@ -114,7 +116,7 @@ class GameModel {
     if (!piece) return;
 
     // Vérifier les limites du plateau
-    const { row: nextRow, col: nextCol } = to;
+    const {row: nextRow, col: nextCol} = to;
     if (nextRow < 0 || nextRow >= 5 || nextCol < 0 || nextCol >= 5) {
       console.log("Poussée impossible : hors du plateau.");
       return false;
@@ -132,7 +134,7 @@ class GameModel {
       // Calculer la case suivante dans la direction de la poussée
       const offsetRow = nextRow - piece.position.row;
       const offsetCol = nextCol - piece.position.col;
-      const nextPosition = { row: nextRow + offsetRow, col: nextCol + offsetCol };
+      const nextPosition = {row: nextRow + offsetRow, col: nextCol + offsetCol};
 
       // Pousser la pièce suivante récursivement
       const pushSuccess = this.movePieceWithPush(pushedPiece.name, nextPosition, direction);
@@ -146,7 +148,6 @@ class GameModel {
     this.movePiece(name, to);
     return true;
   }
-
 
 
   incrementTurn() {
@@ -178,11 +179,11 @@ class GameModel {
 
   removePieceFromBanc(name) {
     this.bancElephants = this.bancElephants.filter(
-      (piece) => piece.name !== name,
+        (piece) => piece.name !== name,
     );
 
     this.bancRhinoceros = this.bancRhinoceros.filter(
-      (piece) => piece.name !== name,
+        (piece) => piece.name !== name,
     );
   }
 
@@ -192,12 +193,16 @@ class GameModel {
     }
   }
 
-  isEntryAllowed(row, col) {
+  isEntryAllowed(row, col, pushing = true) {
     if (
-      this.turnCount < 2 &&
-      ((row === 0 && col === 2) || (row === 4 && col === 2))
+        this.turnCount < 2 &&
+        ((row === 0 && col === 2) || (row === 4 && col === 2))
     ) {
       return false;
+    }
+
+    if (pushing) {
+      return true
     }
     return !this.getPieceAt(row, col);
   }
@@ -243,11 +248,34 @@ class GameModel {
       // Si la case est occupée par une autre pièce que le rocher, la poussée échoue
       return false;
     }
+
+
   }
 
+  pushPiece(fromRow, fromCol, toRow, toCol) {
+    const targetPiece = this.getPieceAt(toRow, toCol);
 
+    // Vérifier si la case cible est occupée
+    if (targetPiece) {
+      const nextRow = toRow + (toRow - fromRow);
+      const nextCol = toCol + (toCol - fromCol);
 
-
-
-
+      // Vérifier si la prochaine case est libre pour pousser
+      if (!this.getPieceAt(nextRow, nextCol) && this.isInBounds(nextRow, nextCol)) {
+        // Déplacer la pièce déjà présente
+        this.movePiece(toRow, toCol, nextRow, nextCol);
+        // Déplacer la nouvelle pièce vers la case cible
+        this.movePiece(fromRow, fromCol, toRow, toCol);
+        return true;
+      } else {
+        console.log("Impossible de pousser la pièce : pas d'espace libre.");
+        return false;
+      }
+    } else {
+      console.log("La case cible est vide, aucune poussée nécessaire.");
+      // Déplacer la pièce normalement
+      this.movePiece(fromRow, fromCol, toRow, toCol);
+      return true;
+    }
+  }
 }
