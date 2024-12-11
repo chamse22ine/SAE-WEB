@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jeu du Siam - Règles</title>
+  <link rel="stylesheet" href="../css/acceuil.css"> <!-- Assuming the CSS file is named style.css -->
+</head>
+<body>
+<header>
+  <h1>Jeu du Siam</h1>
+  <h2>Règles du jeu</h2>
+</header>
+<main>
+  <ol>
+    <li>
+      <strong>Entrée sur le plateau :</strong>
+      <ul>
+        <li>Interdit de jouer sur les cases (0,2) et (4,2) les 2 premiers tours.</li>
+        <li>Pour poser une pièce il y a 2 conditions :
+          <ul>
+            <li>a) Sois sur une case vide (excepté (0,2) et (4,2) les 2 premiers tours)</li>
+            <li>b) Sois il y a déjà une pièce dessus, dans ce cas on peut la pousser sous certaines conditions (voir 5).</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <strong>Se déplacer sur une case libre :</strong>
+      <ul>
+        <li>Les déplacements en diagonales sont interdits.</li>
+        <li>Changement d'orientation à volonté.</li>
+      </ul>
+    </li>
+    <li>
+      <strong>Changer l'orientation sans changer l'animal de case :</strong>
+      <ul>
+        <li>Changer l'orientation compte comme un tour.</li>
+      </ul>
+    </li>
+    <li>
+      <strong>Sortir un animal sur une case extérieure :</strong>
+      <ul>
+        <li>On peut sortir à tout moment une pièce du plateau si elle est aux limites.</li>
+        <li>Compte comme un tour de jeu et l'animal est récupérable et réutilisable.</li>
+      </ul>
+    </li>
+    <li>
+      <strong>Se déplacer en poussant d'autres pièces sur le plateau :</strong>
+      <ul>
+        <li>a) La poussée est indiquée par un chevron noir sur la pièce (aux directions où la poussée est possible).</li>
+        <li>b) 1 animal dans la bonne direction peut pousser 1 rocher. 2 animaux dans la bonne direction peuvent pousser 2 rochers, etc.</li>
+        <li>c) Les animaux ont la même force de poussée (dans la même direction). Par exemple, en 1 vs 1, il ne se passe rien, mais 2 vs 1 donne l'avantage à ceux qui sont le plus nombreux (dans la bonne direction).</li>
+        <li>d) 1 animal peut passer plusieurs animaux s'ils ne font pas face.</li>
+        <li>e) On peut pousser en entrant sur le plateau.</li>
+        <li>f) Pour les autres situations de poussée, il suffit de voir la direction.</li>
+        <li>g) Pour gagner la partie, il faut qu'un rocher soit sorti. <strong>Attention :</strong> Le vainqueur est celui qui est le plus proche du rocher ET dans la bonne direction.</li>
+        <li>h) Un animal sorti via poussée retourne sur le banc et peut être rejoué.</li>
+        <li>i) Durant une poussée, un animal ne peut changer d'orientation.</li>
+      </ul>
+    </li>
+  </ol>
+</main>
+<footer>
+  <p>Bonne partie !</p>
+</footer>
+</body>
+</html>

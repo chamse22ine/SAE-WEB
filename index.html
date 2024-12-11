@@ -4,100 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cahier des charges - Jeu Siam</title>
+    <title>page d'accueil</title>
+    <link rel="stylesheet" href="../css/regles.css" >
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            line-height: 1.6;
-        }
-
-        h1 {
-            color: #333;
-        }
-
-        .content {
-            background-color: #f9f9f9;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        a {
-            color: #1a73e8;
-        }
     </style>
 </head>
-
 <body>
-
-    <h1>Cahier des charges</h1>
-    <div class="content">
-        <p>L'objectif est de créer une page web dynamique qui permet de jouer une partie du jeu Siam.</p>
-
-        <h2>Règles du jeu</h2>
-        <p><a href="https://090c4d6b-0b5d-44fc-8506-c286659df2fd.filesusr.com/ugd/92ca7d_21a266c24b9a47acb695d974b94541b5.pdf"
-                target="_blank">
-                https://090c4d6b-0b5d-44fc-8506-c286659df2fd.filesusr.com/ugd/92ca7d_21a266c24b9a47acb695d974b94541b5.pdf
-            </a></p>
-
-        <h2>Ressources graphiques</h2>
-        <p><a href="http://www.biboun.com/portfolio/siam/" target="_blank">
-                http://www.biboun.com/portfolio/siam/
-            </a></p>
-
-        <h2>Tutoriel en ligne</h2>
-        <p><a href="https://fr.boardgamearena.com/tutorial?game=siam&tutorial=982" target="_blank">
-                https://fr.boardgamearena.com/tutorial?game=siam&tutorial=982
-            </a></p>
-
-
-        <h2>Fonctionnement de l'application Jeu Siam</h2>
-        <p>La page du jeu:</p>
-        <ul>
-            <li>Affiche le plateau dans sa position de départ</li>
-            <li>Indique le joueur dont c'est le tour</li>
-            <li>Affiche le nombre de pièces en réserve pour chaque joueur</li>
-            <li>Met en évidence la dernière pièce à avoir été déplacée</li>
-            <li>Propose au joueur actif de sélectionner une pièce du plateau ou de la réserve (toutes mises en évidence)
-            </li>
-            <li>Une fois la pièce sélectionnée, propose de cliquer sur une des zones de destination possibles et mises
-                en évidence, ou d'annuler la sélection initiale pour revenir à l'étape précédente</li>
-            <li>Met à jour la position et passe la main à l'adversaire</li>
-            <li>Ajouter un bouton qui permet de réinitialiser le plateau et de recommencer la partie</li>
-            <li>Il faut bien sûr tester les conditions de victoire et détecter la fin de partie!</li>
-        </ul>
-
-        <h2>Quelques conseils</h2>
-        <ul>
-            <li>Le plateau est constitué d'une div avec un positionnement relatif et l'image du plateau en image de fond
-            </li>
-            <li>Les zones cliquables sont des divs positionnées en absolute par rapport au plateau</li>
-            <li>Pas de tableau HTML pour l'affichage du plateau, ce n'est pas fait pour ça!</li>
-            <li>Tout est géré en JavaScript dans la même page, on ne sauvegarde rien, il faut donc éviter de rafraîchir
-                la page sinon on perdra la partie en cours</li>
-            <li>Lisez bien les règles du jeu, au besoin faites quelques parties en ligne (boardgamearena.com);
-                l'implémentation correcte des règles fera partie des éléments évalués</li>
-        </ul>
-
-        <h2>Contraintes techniques</h2>
-        <ul>
-            <li>Modele MVC: structurer l'application pour bien séparer les parties Modele - Vue - Controleurs</li>
-            <li>Utilisations de classes d'objets pour les éléments constitutifs du jeu</li>
-            <li>JavaScript natif + HTML5 + CSS (bootstrap autorisé)</li>
-            <li>Toute utilisation d'une bibliothèque/API/framework annexe devra être validée au préalable par
-                l'enseignant (ou si vous voulez gagner du temps: la réponse est non)</li>
-        </ul>
-
-        <h2>Infos pratiques</h2>
-        <ul>
-            <li>Date de rendu du projet : 13 décembre, sous forme d'un zip comprenant la page et toutes les ressources
-                nécessaires (scripts, images)</li>
-            <li>Projet à réaliser en binôme, sauf autorisation explicite</li>
-            <li>Composition des binômes à me communiquer par mail avant le 31 octobre</li>
-        </ul>
-    </div>
-
+<header>
+    <h1>Jeu du Siam</h1>
+</header>
+<main>
+    <button onclick="location.href='pages/page1.html'">Jouer</button>
+    <button onclick="location.href='pages/regles.html'">Règles</button>
+</main>
+<div class="decorative-elephants">
+    Par Chamseddine Adaadour et Quentin Pellosse
+</div>
 </body>
-
 </html>
