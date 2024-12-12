@@ -1,10 +1,11 @@
 class Piece {
-  constructor(name, type, player, position, orientation = 0) {
+  constructor(name, type, player, position, orientation = 0, force = 1) {
     this.name = name;
     this.type = type;
     this.player = player;
     this.position = position;
     this.orientation = orientation;
+    this.force = force;
   }
 }
 
@@ -23,29 +24,29 @@ class GameModel {
 
   initializePieces() {
     return [
-      new Piece("rocher 1", "rocher_1", null, { row: 2, col: 1 }),
-      new Piece("rocher 2", "rocher_2", null, { row: 2, col: 2 }),
-      new Piece("rocher 3", "rocher_3", null, { row: 2, col: 3 }),
+      new Piece("rocher 1", "rocher_1", null, { row: 2, col: 1 }, 0, 1),
+      new Piece("rocher 2", "rocher_2", null, { row: 2, col: 2 }, 0, 1),
+      new Piece("rocher 3", "rocher_3", null, { row: 2, col: 3 }, 0, 1),
     ];
   }
 
   initializeElephantsBanc() {
     return [
-      new Piece("elephant 1", "éléphant_1", "player1", null),
-      new Piece("elephant 2", "éléphant_2", "player1", null),
-      new Piece("elephant 3", "éléphant_3", "player1", null),
-      new Piece("elephant 4", "éléphant_4", "player1", null),
-      new Piece("elephant 5", "éléphant_5", "player1", null),
+      new Piece("elephant 1", "éléphant_1", "player1", null, 0, 2),
+      new Piece("elephant 2", "éléphant_2", "player1", null, 0, 2),
+      new Piece("elephant 3", "éléphant_3", "player1", null, 0, 2),
+      new Piece("elephant 4", "éléphant_4", "player1", null, 0, 2),
+      new Piece("elephant 5", "éléphant_5", "player1", null, 0, 2),
     ];
   }
 
   initializeRhinocerosBanc() {
     return [
-      new Piece("rhinoceros 1", "rhino_1", "player2", null),
-      new Piece("rhinoceros 2", "rhino_2", "player2", null),
-      new Piece("rhinoceros 3", "rhino_3", "player2", null),
-      new Piece("rhinoceros 4", "rhino_4", "player2", null),
-      new Piece("rhinoceros 5", "rhino_5", "player2", null),
+      new Piece("rhinoceros 1", "rhino_1", "player2", null, 0, 2),
+      new Piece("rhinoceros 2", "rhino_2", "player2", null, 0, 2),
+      new Piece("rhinoceros 3", "rhino_3", "player2", null, 0, 2),
+      new Piece("rhinoceros 4", "rhino_4", "player2", null, 0, 2),
+      new Piece("rhinoceros 5", "rhino_5", "player2", null, 0, 2),
     ];
   }
 
@@ -100,6 +101,46 @@ class GameModel {
       console.error(`Impossible de trouver la pièce avec le nom : ${pieceName}`);
     }
   }
+  calculateForce(chain, pushDirection) {
+    return chain.reduce((total, piece) => {
+      // Si la pièce est dans la même direction que la poussée, elle ne résiste pas
+      if (this.isDirectionCompatible(piece.direction, pushDirection)) {
+        console.log(`Force ignorée pour ${piece.name}, direction compatible.`);
+        return total; // Ne pas ajouter sa force
+      }
+      console.log(`Ajout de la force de ${piece.name}: ${piece.force}`);
+      return total + piece.force; // Ajouter sa force si elle résiste
+    }, 1); // Commence avec 0
+  }
+
+
+
+  isDirectionCompatible(pieceDirection, pushDirection) {
+    // Correspondance des directions opposées
+    const oppositeDirections = {
+      haut: "bas",
+      bas: "haut",
+      gauche: "droite",
+      droite: "gauche",
+    };
+
+    // Vérifie si la pièce est orientée dans la direction opposée à la poussée
+    if (oppositeDirections[pieceDirection] === pushDirection) {
+      console.log(`La pièce est orientée en opposition : ${pieceDirection} contre ${pushDirection}.`);
+      return false; // La pièce résiste
+    }
+
+    // Vérifie si la pièce est dans la même direction que la poussée
+    if (pieceDirection === pushDirection) {
+      console.log(`La pièce est orientée dans la même direction que la poussée : ${pieceDirection}.`);
+      return true; // La pièce ne résiste pas
+    }
+
+    // Dans tous les autres cas, la pièce résiste
+    console.log(`La pièce est orientée dans une autre direction : ${pieceDirection} (poussée : ${pushDirection}).`);
+    return true;
+  }
+
 
   movePiece(pieceName, newPosition, direction) {
     const piece = this.getPieceByName(pieceName);
@@ -117,15 +158,17 @@ class GameModel {
 
         // Vérifie si la prochaine position est valide
         if (!nextPosition || !this.isPositionValid(nextPosition.row, nextPosition.col)) {
+          // Gestion des pièces en dehors des limites
           const removedPiece = pushChain.pop();
           if (removedPiece.type.startsWith("rocher")) {
             console.log("Un rocher a été poussé hors du plateau.");
-            this.onVictory(removedPiece, piece); // Passe le rocher et la pièce poussante
+            this.onVictory(removedPiece, piece); // Déclenche la victoire
             return; // Stoppe l'exécution après la victoire
+          } else {
+            console.log(`La pièce ${removedPiece.name} est renvoyée au banc.`);
+            this.returnPieceToBanc(removedPiece); // Renvoie la pièce au banc
+            break;
           }
-
-          this.returnPieceToBanc(removedPiece); // Renvoie les autres pièces sur le banc
-          break;
         }
 
         currentRow = nextPosition.row;
@@ -142,7 +185,7 @@ class GameModel {
         this.board[nextPosition.row][nextPosition.col] = pieceToMove; // Place la pièce à la nouvelle position
       }
 
-      // Place la pièce qui pousse dans la position initiale
+      // Déplace la pièce qui pousse dans sa nouvelle position
       if (piece.position) {
         this.board[piece.position.row][piece.position.col] = null; // Libère l'ancienne position
       } else {
@@ -162,6 +205,11 @@ class GameModel {
       console.error(`Impossible de trouver la pièce avec le nom : ${pieceName}`);
     }
   }
+
+
+
+
+
 
   returnPieceToBanc(piece) {
     if (piece.type.startsWith("rhino")) {
@@ -220,15 +268,11 @@ class GameModel {
     };
     const movement = directions[direction];
     if (!movement) return null;
-
     let row = rockPosition.row - movement.row;
     let col = rockPosition.col - movement.col;
-
     while (this.isPositionValid(row, col)) {
       const piece = this.getPieceAt(row, col);
-
       if (piece && piece !== pushingPiece) {
-        // Vérifie si la pièce est orientée vers le rocher
         if (piece.direction === direction) {
           return piece;
         }

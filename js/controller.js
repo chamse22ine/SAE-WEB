@@ -180,20 +180,55 @@ class GameController {
         if (target.classList.contains("case")) {
             const row = parseInt(target.dataset.row);
             const col = parseInt(target.dataset.col);
+
             if (!this.model.isEntryAllowed(row, col)) {
                 this.ajouterEvenement("Cette case est interdite pour l'entrée.");
                 return;
             }
+
             const direction = this.getSelectedPieceDirection();
             if (!direction) {
                 this.ajouterEvenement("Aucune direction valide pour la pièce.");
                 return;
             }
+
             const occupyingPiece = this.model.getPieceAt(row, col);
-            if (occupyingPiece && this.selectedPiece) {
-                this.model.movePiece(occupyingPiece.name, { row, col }, direction);
-            }
+
             if (this.selectedPiece) {
+                // Vérifie si la pièce à pousser existe
+                if (occupyingPiece) {
+                    const pushChain = [];
+                    let currentRow = row;
+                    let currentCol = col;
+
+                    // Récupère la chaîne de poussée
+                    while (this.model.getPieceAt(currentRow, currentCol)) {
+                        const nextPiece = this.model.getPieceAt(currentRow, currentCol);
+                        pushChain.push(nextPiece);
+                        const nextPosition = this.model.getPositionInDirection(
+                            { row: currentRow, col: currentCol },
+                            direction
+                        );
+
+                        if (!nextPosition || !this.model.isPositionValid(nextPosition.row, nextPosition.col)) {
+                            break;
+                        }
+
+                        currentRow = nextPosition.row;
+                        currentCol = nextPosition.col;
+                    }
+
+                    // Calcul des forces avec prise en compte des directions
+                    const pushingForce = this.selectedPiece.force;
+                    const chainForce = this.model.calculateForce(pushChain, direction);
+
+                    if (pushingForce < chainForce) {
+                        this.ajouterEvenement("Poussée invalide : force insuffisante.");
+                        return; // Bloque la poussée si la force est insuffisante
+                    }
+                }
+
+                // Si pas de problème de poussée, déplacer la pièce sélectionnée
                 this.model.movePiece(this.selectedPiece.name, { row, col }, direction);
                 this.model.removePieceFromBanc(this.selectedPiece.name);
                 this.view.renderBoard(this.model.board, false);
@@ -204,9 +239,11 @@ class GameController {
                 this.ajouterEvenement(`Pièce ${this.selectedPiece.name} placée sur le plateau.`);
                 this.piecePlacedThisTurn = true;
             }
+
             this.selectedPiece = null;
         }
     }
+
 
     terminerTour() {
         this.ajouterEvenement(`Tour terminé pour ${this.model.getActivePlayer()}.`);
@@ -227,6 +264,5 @@ document.addEventListener("DOMContentLoaded", () => {
     const model = new GameModel();
     const view = new GameView(model);
     const controller = new GameController(model, view);
-    model.setController(controller);
 });
 
