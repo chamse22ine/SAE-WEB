@@ -103,12 +103,9 @@ class GameModel {
 
   movePiece(pieceName, newPosition, direction) {
     const piece = this.getPieceByName(pieceName);
-
     if (piece) {
       let currentRow = newPosition.row;
       let currentCol = newPosition.col;
-
-      // Collect all pieces in the push chain
       const pushChain = [];
       while (this.getPieceAt(currentRow, currentCol)) {
         const occupyingPiece = this.getPieceAt(currentRow, currentCol);
@@ -121,14 +118,10 @@ class GameModel {
         currentRow = nextPosition.row;
         currentCol = nextPosition.col;
       }
-
-      // Check if the last position in the chain is valid and empty
       if (!this.isPositionValid(currentRow, currentCol) || this.getPieceAt(currentRow, currentCol)) {
         console.error("Poussée impossible : fin de chaîne invalide ou occupée.");
         return;
       }
-
-      // Move all pieces in the push chain
       for (let i = pushChain.length - 1; i >= 0; i--) {
         const pieceToMove = pushChain[i];
         const nextPosition = this.getPositionInDirection(pieceToMove.position, direction);
@@ -136,8 +129,6 @@ class GameModel {
         pieceToMove.position = nextPosition;
         this.board[nextPosition.row][nextPosition.col] = pieceToMove;
       }
-
-      // Move the pushing piece into the initial position
       if (piece.position) {
         this.board[piece.position.row][piece.position.col] = null;
       } else {
@@ -153,8 +144,6 @@ class GameModel {
     }
   }
 
-
-
   removePieceFromBanc(name) {
     this.bancElephants = this.bancElephants.filter(
       (piece) => piece.name !== name,
@@ -168,7 +157,7 @@ class GameModel {
   removePieceAt(row, col) {
     if (this.board[row][col]) {
       this.board[row][col] = null;
-    } ww
+    }
   }
 
   isEntryAllowed(row, col, pushing = true) {
@@ -203,6 +192,4 @@ class GameModel {
     };
     return directions[direction] || null;
   }
-
-
 }
