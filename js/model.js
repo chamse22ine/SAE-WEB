@@ -187,20 +187,59 @@ class GameModel {
     return false;
   }
   onVictory(rock, pushingPiece) {
-    if (pushingPiece && pushingPiece.player) {
-      const winner = `Le joueur ${pushingPiece.player}`;
-      if (pushingPiece.player === "player1") {
-        alert(`Félicitations les Elephants! Vous avez poussé le rocher ${rock.name} hors du plateau et remporté la victoire !`);
+    if (!pushingPiece || !pushingPiece.player) {
+      alert("Aucun gagnant détecté.");
+      console.log("Fin de la partie sans gagnant.");
+      return;
+    }
+
+    const direction = pushingPiece.direction;
+    const rockPosition = rock.position;
+    const potentialWinner = this.findClosestPieceTowardsRock(rockPosition, direction, pushingPiece);
+
+    if (potentialWinner) {
+      const winner = `Le joueur ${potentialWinner.player}`;
+      if (potentialWinner.player === "player1") {
+        alert(`Félicitations les Elephants! ${potentialWinner.name} a remporté la victoire en poussant le rocher ${rock.name} hors du plateau !`);
       } else {
-        alert(`Bravo les Rhinos ! Vous avez écrasé la concurrence avec le rocher ${rock.name} !`);
+        alert(`Bravo les Rhinos! ${potentialWinner.name} a gagné en poussant le rocher ${rock.name} !`);
       }
       console.log(`Fin de la partie. ${winner} a gagné.`);
     } else {
-      alert("Aucun gagnant détecté.");
-      console.log("Fin de la partie sans gagnant.");
+      alert("Aucun gagnant clair.");
+      console.log("Fin de la partie sans gagnant clair.");
     }
   }
 
+  findClosestPieceTowardsRock(rockPosition, direction, pushingPiece) {
+    const directions = {
+      "bas": { row: 1, col: 0 },
+      "haut": { row: -1, col: 0 },
+      "gauche": { row: 0, col: -1 },
+      "droite": { row: 0, col: 1 },
+    };
+    const movement = directions[direction];
+    if (!movement) return null;
+
+    let row = rockPosition.row - movement.row;
+    let col = rockPosition.col - movement.col;
+
+    while (this.isPositionValid(row, col)) {
+      const piece = this.getPieceAt(row, col);
+
+      if (piece && piece !== pushingPiece) {
+        // Vérifie si la pièce est orientée vers le rocher
+        if (piece.direction === direction) {
+          return piece;
+        }
+      }
+
+      row -= movement.row;
+      col -= movement.col;
+    }
+
+    return null;
+  }
 
 
   getClosestPiece(row, col) {
