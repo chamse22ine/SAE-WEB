@@ -5,7 +5,7 @@ class GameController {
         this.selectedPiece = null;
         this.piecePlacedThisTurn = false;
         this.currentAction = "pick";
-        this.view.renderBoard(this.model.board);
+        this.view.renderBoard(this.model.board, true);
         this.view.renderElephantsBanc(this.model.bancElephants);
         this.view.renderRhinocerosBanc(this.model.bancRhinoceros);
         this.addEventListeners();
@@ -197,24 +197,27 @@ class GameController {
                 return;
             }
 
-            const occupyingPiece = this.model.getPieceAt(row, col);
-
-            // Vérifier s'il y a une pièce déjà présente sur la case
-            if (occupyingPiece && this.selectedPiece) {
-                // Déplacer la pièce existante en fonction de l'orientation de la pièce posée
-                const direction = this.getSelectedPieceDirection(); // Direction de la pièce posée
-                this.model.movePiece(occupyingPiece.name, { row, col }, direction);
-                console.log("Direction : " + direction)
+            const direction = this.getSelectedPieceDirection();
+            if (!direction) {
+                this.ajouterEvenement("Aucune direction valide pour la pièce.");
+                return;
             }
 
-            // Placer la nouvelle pièce
+            const occupyingPiece = this.model.getPieceAt(row, col);
+            if (occupyingPiece && this.selectedPiece) {
+                this.model.movePiece(occupyingPiece.name, { row, col }, direction);
+            }
+
             if (this.selectedPiece) {
-                this.model.movePiece(this.selectedPiece.name, { row, col });
+                this.model.movePiece(this.selectedPiece.name, { row, col }, direction);
                 this.model.removePieceFromBanc(this.selectedPiece.name);
-                this.view.renderBoard(this.model.board);
+
+                // Met à jour l'affichage du plateau, sans mettre en évidence les cases libres
+                this.view.renderBoard(this.model.board, false);
                 this.view.renderElephantsBanc(this.model.bancElephants);
                 this.view.renderRhinocerosBanc(this.model.bancRhinoceros);
                 this.view.highlightLastMovedPiece(this.selectedPiece.name);
+
                 this.ajouterEvenement(`Pièce ${this.selectedPiece.name} placée sur le plateau.`);
             }
             this.selectedPiece = null;
@@ -224,8 +227,9 @@ class GameController {
 
 
 
-    terminerTour() {
 
+
+    terminerTour() {
         this.ajouterEvenement(`Tour terminé pour ${this.model.getActivePlayer()}.`);
         this.model.incrementTurn();
         this.selectedPiece = null;
@@ -233,8 +237,13 @@ class GameController {
         this.currentAction = "pick";
         this.model.switchPlayer();
         this.view.updateActivePlayer(this.model.getActivePlayer());
+
+        // Met à jour l'affichage du plateau avec mise en évidence des cases libres pour le nouveau joueur
+        this.view.renderBoard(this.model.board, true);
+
         this.ajouterEvenement(`C'est maintenant au tour des ${this.model.getActivePlayer()}.`);
     }
+
 }
 
 
@@ -250,5 +259,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Passez une référence au contrôleur dans le modèle
     model.setController(controller);
+
 });
 

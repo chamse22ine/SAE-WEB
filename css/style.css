@@ -139,7 +139,6 @@ body {
   transform: rotate(270deg);
 }
 
-
 /* Animation de poussée */
 @keyframes push-top {
   0% {
@@ -204,4 +203,14 @@ body {
 
 .push-right {
   animation: push-right 0.5s ease-in-out;
+}
+
+.case-libre {
+  border: 2px dashed green;
+  background-color: rgba(4, 0, 255, 0.1);
+  transition: background-color 0.3s ease, border 0.3s ease;
+}
+.case-libre:hover {
+  background-color: rgba(4, 0, 255, 0.3);
+  cursor: pointer;
 }

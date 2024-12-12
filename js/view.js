@@ -7,7 +7,7 @@ class GameView {
     }
 
     // Affiche l'état du plateau
-    renderBoard(board) {
+    renderBoard(board, highlightEmpty = false) {
         console.log("Rendu de l'état du plateau :", board);
 
         // Réinitialise l'affichage du plateau
@@ -29,13 +29,10 @@ class GameView {
                 } else if (!this.model.isEntryAllowed(row, col)) {
                     caseElement.style.backgroundImage = `url('../assets/images/fleches/croix.png')`;
                     caseElement.classList.add("case-interdite");
+                } else if (highlightEmpty) {
+                    // Ajout de la classe "case-libre" si l'option highlightEmpty est activée
+                    caseElement.classList.add("case-libre");
                 }
-
-                // Ajout des flèches sur les bords
-                if (row === 0) this.addArrow(caseElement, "haut");
-                if (row === 4) this.addArrow(caseElement, "bas");
-                if (col === 0) this.addArrow(caseElement, "gauche");
-                if (col === 4) this.addArrow(caseElement, "droite");
 
                 this.plateauElement.appendChild(caseElement);
             }
@@ -43,9 +40,29 @@ class GameView {
         console.log("Plateau rendu avec succès.");
     }
 
+
+
+
     showMessage(message) {
         console.log(message)
     }
+    highlightCasesLibres() {
+        // Parcourir toutes les cases du plateau
+        for (let row = 0; row < 5; row++) {
+            for (let col = 0; col < 5; col++) {
+                const caseElement = this.plateauElement.querySelector(`[data-row='${row}'][data-col='${col}']`);
+                if (caseElement) {
+                    // Vérifier si la case est vide
+                    if (!this.model.getPieceAt(row, col)) {
+                        caseElement.classList.add('case-libre'); // Ajouter une classe pour surbrillance
+                    } else {
+                        caseElement.classList.remove('case-libre'); // Retirer la classe si la case n'est pas vide
+                    }
+                }
+            }
+        }
+    }
+
 
     // Ajoute une flèche à une case
     addArrow(caseElement, direction) {

@@ -94,59 +94,65 @@ class GameModel {
     const piece = this.getPieceByName(pieceName);
 
     if (piece) {
-      piece.direction = direction; // Met à jour la direction
+      piece.direction = direction;
       console.log(`Direction de la pièce ${piece.name} mise à jour : ${direction}`);
     } else {
       console.error(`Impossible de trouver la pièce avec le nom : ${pieceName}`);
     }
   }
 
-
-
   movePiece(pieceName, newPosition, direction) {
     const piece = this.getPieceByName(pieceName);
 
     if (piece) {
-      // Vérifier si une pièce occupe déjà la case cible
-      const occupyingPiece = this.getPieceAt(newPosition.row, newPosition.col);
+      let currentRow = newPosition.row;
+      let currentCol = newPosition.col;
 
-      if (occupyingPiece) {
-        // Déterminer la direction de déplacement pour la pièce existante
-        const targetDirection = piece.direction || "droite"; // Par défaut "haut" si aucune direction n'est précisée
-        const newPositionForOccupyingPiece = this.getPositionInDirection(newPosition, targetDirection);
-
-        // Vérifiez que la nouvelle position est valide et libre
-        if (
-          newPositionForOccupyingPiece &&
-          this.isPositionValid(newPositionForOccupyingPiece.row, newPositionForOccupyingPiece.col) &&
-          !this.getPieceAt(newPositionForOccupyingPiece.row, newPositionForOccupyingPiece.col)
-        ) {
-          // Déplacer la pièce existante
-          this.board[occupyingPiece.position.row][occupyingPiece.position.col] = null;
-          occupyingPiece.position = newPositionForOccupyingPiece;
-          this.board[newPositionForOccupyingPiece.row][newPositionForOccupyingPiece.col] = occupyingPiece;
-
-          console.log(`Déplacement de la pièce ${occupyingPiece.name} vers (${newPositionForOccupyingPiece.row}, ${newPositionForOccupyingPiece.col})`);
-        } else {
-          console.error("Impossible de déplacer la pièce existante, aucune position valide.");
+      // Collect all pieces in the push chain
+      const pushChain = [];
+      while (this.getPieceAt(currentRow, currentCol)) {
+        const occupyingPiece = this.getPieceAt(currentRow, currentCol);
+        pushChain.push(occupyingPiece);
+        const nextPosition = this.getPositionInDirection({ row: currentRow, col: currentCol }, direction);
+        if (!this.isPositionValid(nextPosition.row, nextPosition.col)) {
+          console.error("Poussée impossible : une pièce atteint une bordure.");
           return;
         }
+        currentRow = nextPosition.row;
+        currentCol = nextPosition.col;
       }
 
-      // Maintenant, déplacer la nouvelle pièce
+      // Check if the last position in the chain is valid and empty
+      if (!this.isPositionValid(currentRow, currentCol) || this.getPieceAt(currentRow, currentCol)) {
+        console.error("Poussée impossible : fin de chaîne invalide ou occupée.");
+        return;
+      }
+
+      // Move all pieces in the push chain
+      for (let i = pushChain.length - 1; i >= 0; i--) {
+        const pieceToMove = pushChain[i];
+        const nextPosition = this.getPositionInDirection(pieceToMove.position, direction);
+        this.board[pieceToMove.position.row][pieceToMove.position.col] = null;
+        pieceToMove.position = nextPosition;
+        this.board[nextPosition.row][nextPosition.col] = pieceToMove;
+      }
+
+      // Move the pushing piece into the initial position
       if (piece.position) {
         this.board[piece.position.row][piece.position.col] = null;
       } else {
         this.removePieceFromBanc(pieceName);
       }
-
       piece.position = newPosition;
       this.board[newPosition.row][newPosition.col] = piece;
 
       console.log(`Pièce ${piece.name} déplacée à (${newPosition.row}, ${newPosition.col})`);
       this.lastMovedPiece = piece;
+    } else {
+      console.error(`Impossible de trouver la pièce avec le nom : ${pieceName}`);
     }
   }
+
 
 
   removePieceFromBanc(name) {
@@ -162,15 +168,14 @@ class GameModel {
   removePieceAt(row, col) {
     if (this.board[row][col]) {
       this.board[row][col] = null;
-    }
+    } ww
   }
 
   isEntryAllowed(row, col, pushing = true) {
-    // ne pas oublier de le faire aussi pour 1,1 ; 1,2 ; 1,3  
     if (
-      this.turnCount < 2 &&
+      this.turnCount <= 2 &&
       ((row === 0 && col === 2) || (row === 4 && col === 2)) || ((row === 1 && col === 1)) || ((row === 1 && col === 2)) || ((row === 1 && col === 3)) ||
-        ((row === 3 && col === 1)) || ((row === 3 && col === 2)) || ((row === 3 && col === 3))
+      ((row === 3 && col === 1)) || ((row === 3 && col === 2)) || ((row === 3 && col === 3))
     ) {
       return false;
     }
@@ -192,14 +197,12 @@ class GameModel {
   getPositionInDirection(startPosition, direction) {
     const directions = {
       "bas": { row: startPosition.row + 1, col: startPosition.col },
-      "haut": { row: startPosition.row, col: startPosition.col },
+      "haut": { row: startPosition.row - 1, col: startPosition.col },
       "gauche": { row: startPosition.row, col: startPosition.col - 1 },
       "droite": { row: startPosition.row, col: startPosition.col + 1 },
     };
-    /*
-    console.log("je suis kebabier" + this.GameControllerselectedPiece.direction)
-    console.log("je suis ker" + directions[direction])*/
-    return directions[direction];
+    return directions[direction] || null;
   }
+
 
 }
