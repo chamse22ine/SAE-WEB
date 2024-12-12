@@ -176,10 +176,7 @@ class GameController {
 
     handlePlateauClick(event) {
         const target = event.target;
-        if (this.currentAction !== "place") {
-            this.ajouterEvenement("Vous devez d'abord sélectionner une pièce avant de la poser.");
-            return;
-        }
+
         if (target.classList.contains("case")) {
             const row = parseInt(target.dataset.row);
             const col = parseInt(target.dataset.col);
@@ -223,7 +220,6 @@ class GameController {
         this.view.highlightSelectablePieces(this.model.getActivePlayer());
         this.ajouterEvenement(`C'est maintenant au tour des ${this.model.getActivePlayer()}.`);
     }
-
 
 }
 
