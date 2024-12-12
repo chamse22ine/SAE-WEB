@@ -85,6 +85,10 @@ class GameController {
     }
 
     handleBancClick(event, type) {
+        if (this.piecePlacedThisTurn) {
+            this.ajouterEvenement("Vous avez déja placé une pièce ce tour-ci.")
+            return
+        }
         const target = event.target;
 
         if (type !== this.model.getActivePlayer()) {
@@ -107,6 +111,7 @@ class GameController {
             }
         }
     }
+
 
     tournerPieceBanc(direction) {
         if (!this.selectedPiece) console.log("On ne peux pas changer l'orientation d'une pièce deja posé.");
@@ -200,6 +205,7 @@ class GameController {
                 this.view.highlightLastMovedPiece(this.selectedPiece.name);
 
                 this.ajouterEvenement(`Pièce ${this.selectedPiece.name} placée sur le plateau.`);
+                this.piecePlacedThisTurn = true;
             }
             this.selectedPiece = null;
         }
@@ -209,7 +215,7 @@ class GameController {
         this.ajouterEvenement(`Tour terminé pour ${this.model.getActivePlayer()}.`);
         this.model.incrementTurn();
         this.selectedPiece = null;
-        this.piecePlacedThisTurn = false;
+        this.piecePlacedThisTurn = false; // Réinitialisation
         this.currentAction = "pick";
         this.model.switchPlayer();
         this.view.updateActivePlayer(this.model.getActivePlayer());
@@ -217,6 +223,7 @@ class GameController {
         this.view.highlightSelectablePieces(this.model.getActivePlayer());
         this.ajouterEvenement(`C'est maintenant au tour des ${this.model.getActivePlayer()}.`);
     }
+
 
 }
 
