@@ -3,11 +3,16 @@
 }
 
 body {
-  color: #ffffff;
-  background-color: #000000;
-  align-items: center;
+  margin: 0;
+  font-family: "Arial", sans-serif;
+  background: linear-gradient(to bottom, #85c1e9, #d6eaf8); /* Sky gradient */
+  display: flex;
+  flex-direction: column;
   justify-content: center;
-  overflow: hidden;
+  align-items: center;
+  height: 100vh;
+  padding-right: 26%; /* Réserve de l'espace pour l'afficheur */
+  box-sizing: border-box;
 }
 
 #conteneur {
@@ -59,14 +64,13 @@ body {
   box-shadow: 0 0 2px #000000;
 }
 
-/* Positionne les boutons juste au-dessus du plateau */
 .controle {
+  margin-top: 5vh;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 10px;
   padding: 10px;
-  background-color: rgba(0, 0, 0, 0.7); /* Fond semi-transparent */
   border-radius: 8px;
 }
 
@@ -90,16 +94,15 @@ body {
   background-color: #ffa500;
 }
 
-/* Conteneur pour l'afficheur d'événements */
 .afficheur {
   position: absolute;
-  top: 100px;
+  top: 10px;
   right: 10px; /* Place le conteneur à droite */
-  width: 200px;
+  width: 25%;
   height: 80vh;
   overflow-y: auto;
-  background-color: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.384);
+  color: black;
   padding: 10px;
   border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -222,4 +225,8 @@ body {
   border: 2px solid red;
   background-color: rgba(255, 0, 0, 0.1);
   transition: background-color 0.3s ease, border 0.3s ease;
+}
+#joueur-actif {
+  margin-bottom: 1vh;
+  font-size: xx-large;
 }
