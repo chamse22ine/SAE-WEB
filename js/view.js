@@ -135,4 +135,13 @@ class GameView {
             }
         }
     }
+
+    updateActivePlayer(player) {
+        console.log(`Joueur actif : ${player}`);
+        const playerDisplay = document.getElementById("active-player");
+        if (playerDisplay) {
+            playerDisplay.textContent = `Joueur actif : ${player}`;
+        }
+    }
+
 }

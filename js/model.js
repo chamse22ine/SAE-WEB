@@ -112,7 +112,7 @@ class GameModel {
 
       if (occupyingPiece) {
         // Déterminer la direction de déplacement pour la pièce existante
-        const targetDirection = direction || "bas"; // Par défaut "haut" si aucune direction n'est précisée
+        const targetDirection = piece.direction || "droite"; // Par défaut "haut" si aucune direction n'est précisée
         const newPositionForOccupyingPiece = this.getPositionInDirection(newPosition, targetDirection);
 
         // Vérifiez que la nouvelle position est valide et libre
@@ -169,7 +169,8 @@ class GameModel {
     // ne pas oublier de le faire aussi pour 1,1 ; 1,2 ; 1,3  
     if (
       this.turnCount < 2 &&
-      ((row === 0 && col === 2) || (row === 4 && col === 2))
+      ((row === 0 && col === 2) || (row === 4 && col === 2)) || ((row === 1 && col === 1)) || ((row === 1 && col === 2)) || ((row === 1 && col === 3)) ||
+        ((row === 3 && col === 1)) || ((row === 3 && col === 2)) || ((row === 3 && col === 3))
     ) {
       return false;
     }

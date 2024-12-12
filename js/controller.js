@@ -10,7 +10,6 @@ class GameController {
         this.view.renderRhinocerosBanc(this.model.bancRhinoceros);
         this.addEventListeners();
         this.addDirectionButtonsEventListeners()
-        this.selectedPiece.direction;
     }
 
 
@@ -84,6 +83,9 @@ class GameController {
         }
     }
 
+    getSelectedPieceDirection() {
+        return this.selectedPiece ? this.selectedPiece.direction : null
+    }
 
 
 
@@ -200,8 +202,9 @@ class GameController {
             // Vérifier s'il y a une pièce déjà présente sur la case
             if (occupyingPiece && this.selectedPiece) {
                 // Déplacer la pièce existante en fonction de l'orientation de la pièce posée
-                const direction = this.selectedPiece.direction; // Direction de la pièce posée
+                const direction = this.getSelectedPieceDirection(); // Direction de la pièce posée
                 this.model.movePiece(occupyingPiece.name, { row, col }, direction);
+                console.log("Direction : " + direction)
             }
 
             // Placer la nouvelle pièce
