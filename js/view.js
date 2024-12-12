@@ -120,9 +120,9 @@ class GameView {
 
     updateActivePlayer(player) {
         console.log(`Joueur actif : ${player}`);
-        const playerDisplay = document.getElementById("active-player");
+        const playerDisplay = document.getElementById("nom-joueur-actif");
         if (playerDisplay) {
-            playerDisplay.textContent = `Joueur actif : ${player}`;
+            playerDisplay.textContent = `${player}`;
         }
     }
 
