@@ -1,20 +1,19 @@
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-  margin: 0;
-  font-family: "Arial", sans-serif;
-  background: linear-gradient(to bottom, #85c1e9, #d6eaf8); /* Sky gradient */
+  height: 100vh;
+  width: 100vw;
+  font-family: sans-serif;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  height: 100vh;
-  padding-right: 26%; /* Réserve de l'espace pour l'afficheur */
-  box-sizing: border-box;
+  background: linear-gradient(to bottom, #85c1e9, #d6eaf8);
 }
-
 #conteneur {
   display: flex;
   flex-direction: column;
@@ -23,40 +22,35 @@ body {
   background-repeat: no-repeat;
   background-position: center;
 }
+#global-container {
+  transform: scale(0.8);
+}
 
 #plateau {
+  width: 100%;
   display: grid;
   grid-template-columns: repeat(5, 116px);
   gap: 5px;
 }
 
-#banc-elephants {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  max-width: 550px;
-  min-height: 120px; /* Définit une hauteur minimale pour que le banc reste visible */
-  border: 1px solid rgba(255, 255, 255, 0.2); /* Optionnel : bordure pour indiquer l'espace */
-}
-
+#banc-elephants,
 #banc-rhinoceros {
   display: flex;
   justify-content: center;
   align-items: center;
   max-width: 550px;
-  min-height: 120px; /* Définit une hauteur minimale pour que le banc reste visible */
-  border: 1px solid rgba(255, 255, 255, 0.2); /* Optionnel : bordure pour indiquer l'espace */
+  min-height: 120px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-/* Style des cases (pour le banc et le plateau) */
 .case {
   width: 116px;
   height: 116px;
   background-size: 80% auto;
   background-repeat: no-repeat;
   background-position: center;
-  transition: background-color 0.3s ease, transform 0.3s ease; /* Ajoute une transition pour la rotation */
-  transform-origin: center; /* Définit l'origine de la rotation au centre de la case */
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  transform-origin: center;
 }
 
 .case:hover {
@@ -65,7 +59,6 @@ body {
 }
 
 .controle {
-  margin-top: 5vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -82,22 +75,61 @@ body {
   background-color: #ffcc00;
   color: #000;
   font-weight: bold;
-  transition: background-color 0.3s;
+  position: relative;
+}
+#btn-important-container {
+  display: flex;
+  flex-direction: column; /* Boutons alignés verticalement */
+  align-items: center; /* Centre horizontalement */
+  gap: 15px; /* Ajoute de l'espace entre les boutons */
+  margin-bottom: 20px; /* Espace entre les boutons et les flèches */
 }
 
-.orientation {
-  height: 25%;
-  width: 30%;
+#controle-orientation {
+  display: flex;
+  flex-direction: row; /* Flèches alignées horizontalement */
+  justify-content: center; /* Centre les flèches horizontalement */
+  gap: 15px; /* Ajoute de l'espace entre les flèches */
+}
+
+.btn-important {
+  background: red;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  text-align: center; /* Centrer le texte */
+}
+
+.btn-important:hover {
+  background-color: darkred; /* Change la couleur au survol */
+}
+
+.btn-orientation {
+  padding: 10px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  background-color: #ffcc00;
+  color: #000;
+  font-weight: bold;
 }
 
 .btn-orientation:hover {
   background-color: #ffa500;
 }
 
+.orientation {
+  height: 25px; /* Taille ajustée des flèches */
+  width: 25px;
+}
+
 .afficheur {
   position: absolute;
   top: 10px;
-  right: 10px; /* Place le conteneur à droite */
+  right: 10px;
   width: 25%;
   height: 80vh;
   overflow-y: auto;
@@ -137,7 +169,6 @@ body {
   transform: rotate(270deg);
 }
 
-/* Animation de poussée */
 @keyframes push-top {
   0% {
     transform: translateY(0);
@@ -186,7 +217,6 @@ body {
   }
 }
 
-/* Classes pour animer les pièces */
 .push-top {
   animation: push-top 0.5s ease-in-out;
 }
@@ -219,7 +249,7 @@ body {
   background-color: rgba(0, 17, 255, 0.1);
   transition: background-color 0.3s ease, border 0.3s ease;
   border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optionnel, pour un effet d'ombre */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 .highlight {
   border: 2px solid red;

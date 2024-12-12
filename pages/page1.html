@@ -10,42 +10,46 @@
   <script src="../js/controller.js"></script>
 </head>
 
-<body>
+<body id="global-container">
+
   <div id="afficheur-evenement" class="afficheur">
     <h3>Événements</h3>
     <ul id="liste-evenements"></ul>
   </div>
+
   <div id="joueur-actif" class="indicateur-joueur">
     Tour de : <span id="nom-joueur-actif">éléphant</span>
   </div>
-
 
   <div id="conteneur">
     <div id="banc-elephants" class="conteneur"></div>
     <div id="plateau" class="conteneur"></div>
     <div id="banc-rhinoceros" class="conteneur"></div>
   </div>
+  <div>
+
+  </div>
+  <div id="btn-important-container">
+    <button id="btn-terminer-tour" class="btn-important">Terminer mon tour</button>
+    <button id="btn-restart" class="btn-important" onclick="location.href='page1.html'">Recommencer la partie</button>
+  </div>
 
   <div id="controle-orientation" class="controle">
     <button id="btn-gauche" class="btn-orientation" data-direction="gauche">
-      <img class="orientation" src="../assets/images/fleches/arrow_left.png" alt="arrow_left" />
+      <img class="orientation" src="../assets/images/fleches/arrow_left.png" alt="Flèche gauche" />
     </button>
     <button id="btn-haut" class="btn-orientation" data-direction="haut">
-      <img class="orientation" src="../assets/images/fleches/arrow_upward.png" alt="arrow_upward" />
+      <img class="orientation" src="../assets/images/fleches/arrow_upward.png" alt="Flèche haut" />
     </button>
     <button id="btn-bas" class="btn-orientation" data-direction="bas">
-      <img class="orientation" src="../assets/images/fleches/arrow_downward.png" alt="arrow_forward" />
+      <img class="orientation" src="../assets/images/fleches/arrow_downward.png" alt="Flèche bas" />
     </button>
     <button id="btn-droite" class="btn-orientation" data-direction="droite">
-      <img class="orientation" src="../assets/images/fleches/arrow_right.png" alt="arrow_right" />
+      <img class="orientation" src="../assets/images/fleches/arrow_right.png" alt="Flèche droite" />
     </button>
-
-
-
   </div>
-  <button id="btn-terminer-tour" class="btn-orientation">Terminer mon tour</button>
-  <button id="btn-restart" class="btn-orientation" onclick="location.href='page1.html'">Recommencer la partie</button>
 
 </body>
+
 
 </html>
