@@ -34,16 +34,16 @@ class GameModel {
       new Piece("elephant 1", "éléphant_1", "player1", null),
       new Piece("elephant 2", "éléphant_2", "player1", null),
       new Piece("elephant 3", "éléphant_3", "player1", null),
-      new Piece("elephant 4", "éléphant_4", "player2", null),
-      new Piece("elephant 5", "éléphant_5", "player2", null),
+      new Piece("elephant 4", "éléphant_4", "player1", null),
+      new Piece("elephant 5", "éléphant_5", "player1", null),
     ];
   }
 
   initializeRhinocerosBanc() {
     return [
-      new Piece("rhinoceros 1", "rhino_1", "player1", null),
-      new Piece("rhinoceros 2", "rhino_2", "player1", null),
-      new Piece("rhinoceros 3", "rhino_3", "player1", null),
+      new Piece("rhinoceros 1", "rhino_1", "player2", null),
+      new Piece("rhinoceros 2", "rhino_2", "player2", null),
+      new Piece("rhinoceros 3", "rhino_3", "player2", null),
       new Piece("rhinoceros 4", "rhino_4", "player2", null),
       new Piece("rhinoceros 5", "rhino_5", "player2", null),
     ];
@@ -103,46 +103,124 @@ class GameModel {
 
   movePiece(pieceName, newPosition, direction) {
     const piece = this.getPieceByName(pieceName);
+
     if (piece) {
       let currentRow = newPosition.row;
       let currentCol = newPosition.col;
+
+      // Collecte toutes les pièces dans la chaîne de poussée
       const pushChain = [];
       while (this.getPieceAt(currentRow, currentCol)) {
         const occupyingPiece = this.getPieceAt(currentRow, currentCol);
         pushChain.push(occupyingPiece);
         const nextPosition = this.getPositionInDirection({ row: currentRow, col: currentCol }, direction);
-        if (!this.isPositionValid(nextPosition.row, nextPosition.col)) {
-          console.error("Poussée impossible : une pièce atteint une bordure.");
-          return;
+
+        // Vérifie si la prochaine position est valide
+        if (!nextPosition || !this.isPositionValid(nextPosition.row, nextPosition.col)) {
+          const removedPiece = pushChain.pop();
+          if (removedPiece.type.startsWith("rocher")) {
+            console.log("Un rocher a été poussé hors du plateau.");
+            this.onVictory(removedPiece, piece); // Passe le rocher et la pièce poussante
+            return; // Stoppe l'exécution après la victoire
+          }
+
+          this.returnPieceToBanc(removedPiece); // Renvoie les autres pièces sur le banc
+          break;
         }
+
         currentRow = nextPosition.row;
         currentCol = nextPosition.col;
       }
-      if (!this.isPositionValid(currentRow, currentCol) || this.getPieceAt(currentRow, currentCol)) {
-        console.error("Poussée impossible : fin de chaîne invalide ou occupée.");
-        return;
-      }
+
+      // Déplace toutes les pièces dans la chaîne de poussée
       for (let i = pushChain.length - 1; i >= 0; i--) {
         const pieceToMove = pushChain[i];
         const nextPosition = this.getPositionInDirection(pieceToMove.position, direction);
-        this.board[pieceToMove.position.row][pieceToMove.position.col] = null;
-        pieceToMove.position = nextPosition;
-        this.board[nextPosition.row][nextPosition.col] = pieceToMove;
+
+        this.board[pieceToMove.position.row][pieceToMove.position.col] = null; // Libère la position actuelle
+        pieceToMove.position = nextPosition; // Met à jour la position de la pièce
+        this.board[nextPosition.row][nextPosition.col] = pieceToMove; // Place la pièce à la nouvelle position
       }
+
+      // Place la pièce qui pousse dans la position initiale
       if (piece.position) {
-        this.board[piece.position.row][piece.position.col] = null;
+        this.board[piece.position.row][piece.position.col] = null; // Libère l'ancienne position
       } else {
-        this.removePieceFromBanc(pieceName);
+        this.removePieceFromBanc(pieceName); // Retire du banc si elle y était
       }
-      piece.position = newPosition;
-      this.board[newPosition.row][newPosition.col] = piece;
+      piece.position = newPosition; // Met à jour la position de la pièce poussante
+      this.board[newPosition.row][newPosition.col] = piece; // Place la pièce sur le plateau
 
       console.log(`Pièce ${piece.name} déplacée à (${newPosition.row}, ${newPosition.col})`);
       this.lastMovedPiece = piece;
+
+      // Vérifie la victoire après le déplacement
+      if (this.checkVictoryCondition()) {
+        console.log("Victoire ! Un rocher a quitté le plateau.");
+      }
     } else {
       console.error(`Impossible de trouver la pièce avec le nom : ${pieceName}`);
     }
   }
+
+  returnPieceToBanc(piece) {
+    if (piece.type.startsWith("rhino")) {
+      this.bancRhinoceros.push(piece);
+    } else if (piece.type.startsWith("éléphant")) {
+      this.bancElephants.push(piece);
+    }
+
+    if (piece.position) {
+      this.board[piece.position.row][piece.position.col] = null;
+    }
+
+    piece.position = null;
+    console.log(`La pièce ${piece.name} a été renvoyée sur le banc approprié.`);
+  }
+
+  checkVictoryCondition() {
+    for (const piece of this.pieces) {
+      if (piece.type.startsWith("rocher") && (!piece.position || !this.isPositionValid(piece.position.row, piece.position.col))) {
+        return true;
+      }
+    }
+    return false;
+  }
+  onVictory(rock, pushingPiece) {
+    if (pushingPiece && pushingPiece.player) {
+      const winner = `Le joueur ${pushingPiece.player}`;
+      if (pushingPiece.player === "player1") {
+        alert(`Félicitations les Elephants! Vous avez poussé le rocher ${rock.name} hors du plateau et remporté la victoire !`);
+      } else {
+        alert(`Bravo les Rhinos ! Vous avez écrasé la concurrence avec le rocher ${rock.name} !`);
+      }
+      console.log(`Fin de la partie. ${winner} a gagné.`);
+    } else {
+      alert("Aucun gagnant détecté.");
+      console.log("Fin de la partie sans gagnant.");
+    }
+  }
+
+
+
+  getClosestPiece(row, col) {
+    let closestPiece = null;
+    let minDistance = Infinity;
+
+    for (const piece of this.pieces) {
+      if (piece.position) {
+        const distance = Math.abs(piece.position.row - row) + Math.abs(piece.position.col - col);
+        if (distance < minDistance) {
+          closestPiece = piece;
+          minDistance = distance;
+        }
+      }
+    }
+
+    return closestPiece;
+  }
+
+
 
   removePieceFromBanc(name) {
     this.bancElephants = this.bancElephants.filter(
@@ -192,4 +270,8 @@ class GameModel {
     };
     return directions[direction] || null;
   }
+
+
+
+
 }

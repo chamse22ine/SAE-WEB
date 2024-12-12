@@ -89,15 +89,19 @@ class GameView {
     }
 
     highlightLastMovedPiece(pieceName) {
+        // Supprime la surbrillance de la pièce précédemment mise en évidence, si elle existe
         const previousHighlight = this.plateauElement.querySelector('.highlight');
         if (previousHighlight) {
             previousHighlight.classList.remove('highlight');
         }
+
+        // Ajoute la classe de surbrillance à la nouvelle pièce
         const newHighlight = this.plateauElement.querySelector(`[data-piece-name='${pieceName}']`);
         if (newHighlight) {
             newHighlight.classList.add('highlight');
         }
     }
+
 
     renderPieceRotation(piece) {
         if (this.bancElephantsElement) {

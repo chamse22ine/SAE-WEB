@@ -59,11 +59,6 @@ body {
   box-shadow: 0 0 2px #000000;
 }
 
-.highlight {
-  border: 3px solid yellow; /* Ajoute une bordure jaune pour mettre en évidence */
-  box-shadow: 0 0 10px rgba(255, 255, 0, 0.7); /* Ajoute un effet lumineux */
-}
-
 /* Positionne les boutons juste au-dessus du plateau */
 .controle {
   display: flex;
@@ -215,14 +210,16 @@ body {
   cursor: pointer;
 }
 
-.case-active {
-  border: 2px solid blue;
-  background-color: rgba(0, 0, 255, 0.1);
-  transition: background-color 0.3s ease, border 0.3s ease;
-}
-
 .piece-selectable {
-  border: 2px solid green;
-  background-color: rgba(0, 255, 0, 0.1);
+  margin: 5px;
+  border: 1px solid blue;
+  background-color: rgba(0, 17, 255, 0.1);
+  transition: background-color 0.3s ease, border 0.3s ease;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optionnel, pour un effet d'ombre */
+}
+.highlight {
+  border: 2px solid red;
+  background-color: rgba(255, 0, 0, 0.1);
   transition: background-color 0.3s ease, border 0.3s ease;
 }
