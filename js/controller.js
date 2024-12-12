@@ -259,6 +259,44 @@ class GameController {
     }
 
 }
+document.addEventListener("keydown", (event) => {
+    switch (event.key) {
+        case "ArrowLeft":
+            handleKeyboardInput("gauche");
+            break;
+        case "ArrowRight":
+            handleKeyboardInput("droite");
+            break;
+        case "ArrowUp":
+            handleKeyboardInput("haut");
+            break;
+        case "ArrowDown":
+            handleKeyboardInput("bas");
+            break;
+        case "Enter":
+            handleEndTurn();
+            break;
+        default:
+            break;
+    }
+});
+
+function handleKeyboardInput(direction) {
+    console.log(`Flèche pressée : ${direction}`);
+    const directionButton = document.querySelector(`[data-direction="${direction}"]`);
+    if (directionButton) {
+        directionButton.click();
+    }
+}
+
+function handleEndTurn() {
+    console.log("Fin de tour via clavier.");
+    const endTurnButton = document.getElementById("btn-terminer-tour");
+    if (endTurnButton) {
+        endTurnButton.click();
+    }
+}
+
 
 document.addEventListener("DOMContentLoaded", () => {
     const model = new GameModel();
