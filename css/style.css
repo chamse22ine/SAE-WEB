@@ -11,6 +11,10 @@ body {
   background: linear-gradient(to bottom, #85c1e9, #d6eaf8);
   overflow: hidden;
 }
+#victory-container:empty {
+  display: none;
+}
+
 #victory-container {
   position: fixed;
   top: 0;
@@ -121,16 +125,6 @@ body {
   border-radius: 8px;
 }
 
-.btn-orientation {
-  padding: 10px 15px;
-  cursor: pointer;
-  border: none;
-  border-radius: 5px;
-  background-color: #ffcc00;
-  color: #000;
-  font-weight: bold;
-  position: relative;
-}
 #btn-important-container {
   margin-top: 15px;
   display: flex;
