@@ -8,12 +8,51 @@ body {
   height: 100vh;
   width: 100vw;
   font-family: sans-serif;
+  background: linear-gradient(to bottom, #85c1e9, #d6eaf8);
+  overflow: hidden;
+}
+
+.global-container {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  background: linear-gradient(to bottom, #85c1e9, #d6eaf8);
+  height: 100vh;
+  width: 100vw;
 }
+
+.joueur-actif {
+  text-align: center;
+  padding: 10px;
+  font-size: xx-large;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.main-content {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.left-content {
+  width: 20%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.center-content {
+  width: 60%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.right-content {
+  width: 20%;
+  padding: 20px;
+}
+
 .container {
   display: flex;
   flex-direction: column;
@@ -21,9 +60,6 @@ body {
   background-image: url("../assets/images/plateau-siam_x2_345x227_003.jpg");
   background-repeat: no-repeat;
   background-position: center;
-}
-.global-container {
-  transform: scale(0.8);
 }
 
 #plateau {
@@ -84,7 +120,7 @@ body {
   flex-direction: row;
   align-items: center;
   gap: 15px;
-  margin-bottom: 20px;
+  margin-bottom: 5px;
 }
 
 #controle-orientation {
@@ -130,11 +166,7 @@ body {
 }
 
 .afficheur {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 25%;
-  height: 80vh;
+  height: 100%;
   overflow-y: auto;
   background-color: rgba(255, 255, 255, 0.384);
   color: black;
@@ -258,8 +290,4 @@ body {
   border: 2px solid red;
   background-color: rgba(255, 0, 0, 0.1);
   transition: background-color 0.3s ease, border 0.3s ease;
-}
-.joueur-actif {
-  margin-bottom: 1vh;
-  font-size: xx-large;
 }
