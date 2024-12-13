@@ -78,8 +78,9 @@ body {
   position: relative;
 }
 #btn-important-container {
+  margin-top: 15px;
   display: flex;
-  flex-direction: column; /* Boutons alignés verticalement */
+  flex-direction: row; /* Boutons alignés verticalement */
   align-items: center; /* Centre horizontalement */
   gap: 15px; /* Ajoute de l'espace entre les boutons */
   margin-bottom: 20px; /* Espace entre les boutons et les flèches */
