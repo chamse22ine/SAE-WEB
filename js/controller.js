@@ -49,6 +49,16 @@ class GameController {
         document
             .getElementById("btn-terminer-tour")
             .addEventListener("click", () => this.terminerTour());
+        document.getElementById("btn-restart").addEventListener("click", () => {
+            this.clearGameState();
+        });
+        document.getElementById("btn-sauvegarder").addEventListener("click", () => {
+            this.saveGameState();
+        });
+        document.getElementById("btn-effacer").addEventListener("click", () => {
+            this.clearGameState();
+        });
+
     }
 
     addDirectionButtonsEventListeners() {
@@ -226,6 +236,51 @@ class GameController {
         this.view.highlightSelectablePieces(this.model.getActivePlayer());
         this.ajouterEvenement(`C'est maintenant au tour des ${this.model.getActivePlayer()}.`);
     }
+    saveGameState() {
+        // Sauvegarder l'état du jeu dans le local storage
+        const gameState = {
+            turnCount: this.model.turnCount,
+            currentPlayer: this.model.currentPlayer,
+            board: this.model.board,
+            bancElephants: this.model.bancElephants,
+            bancRhinoceros: this.model.bancRhinoceros,
+            lastMovedPiece: this.model.lastMovedPiece,
+        };
+        localStorage.setItem('Siam', JSON.stringify(gameState));
+        this.ajouterEvenement('Partie sauvegardée.');
+    }
+
+    loadGameState() {
+        // Charger une partie depuis le local storage
+        const savedState = localStorage.getItem('Siam');
+        if (savedState) {
+            const gameState = JSON.parse(savedState);
+            this.model.turnCount = gameState.turnCount;
+            this.model.currentPlayer = gameState.currentPlayer;
+            this.model.board = gameState.board;
+            this.model.bancElephants = gameState.bancElephants.map(
+                piece => Object.assign(new Piece(), piece)
+            );
+            this.model.bancRhinoceros = gameState.bancRhinoceros.map(
+                piece => Object.assign(new Piece(), piece)
+            );
+            this.model.lastMovedPiece = gameState.lastMovedPiece;
+            this.view.renderBoard(this.model.board, true);
+            this.view.renderElephantsBanc(this.model.bancElephants);
+            this.view.renderRhinocerosBanc(this.model.bancRhinoceros);
+            this.view.updateActivePlayer(this.model.currentPlayer);
+        } else {
+            console.log('Aucune sauvegarde trouvée.');
+        }
+    }
+
+    clearGameState() {
+        // Supprimer la sauvegarde
+        localStorage.removeItem('Siam');
+        this.ajouterEvenement('Sauvegarde supprimée.');
+        location.reload();
+    }
+
 
 }
 document.addEventListener("keydown", (event) => {
@@ -274,5 +329,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const model = new GameModel();
     const view = new GameView(model);
     const controller = new GameController(model, view);
+    controller.loadGameState();
 });
 

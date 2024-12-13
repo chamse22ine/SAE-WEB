@@ -129,7 +129,7 @@ body {
 
 #btn-important-container {
   margin-top: 15px;
-  display: flex;
+  display: grid;
   flex-direction: row;
   align-items: center;
   gap: 15px;
@@ -144,7 +144,7 @@ body {
 }
 
 .btn-important {
-  background: red;
+  background: green;
   color: white;
   font-size: 16px;
   font-weight: bold;
@@ -153,7 +153,9 @@ body {
   border-radius: 5px;
   text-align: center;
 }
-
+.btn-important:nth-of-type(2n) {
+  background-color: red;
+}
 .btn-important:hover {
   background-color: darkred;
   cursor: pointer;
