@@ -107,7 +107,7 @@ body {
 }
 
 .case:hover {
-  background-color: lightblue;
+  background-color: rgb(54, 124, 148);
   box-shadow: 0 0 2px #000000;
   cursor: pointer;
 }
