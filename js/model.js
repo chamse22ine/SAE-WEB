@@ -213,45 +213,33 @@ class GameModel {
   onVictory(rock, pushingPiece) {
     // Gère la logique de victoire lorsqu'un rocher est poussé hors du plateau
     if (!pushingPiece || !pushingPiece.player) {
-      alert("Aucun gagnant détecté.");
-      console.log("Fin de la partie sans gagnant.");
+      console.log("match nul");
       return;
     }
-
     const direction = pushingPiece.direction;
     const rockPosition = rock.position;
     const potentialWinner = this.findClosestPieceRock(rockPosition, direction, pushingPiece);
-
     if (potentialWinner) {
       const winner = `Le joueur ${potentialWinner.player}`;
-      let victoryMessage = "";
       let victoryImageUrl = "";
 
       if (potentialWinner.player === "player1") {
-        victoryMessage = `Félicitations les Elephants! ${potentialWinner.name} a remporté la victoire en poussant le rocher ${rock.name} hors du plateau !`;
         victoryImageUrl = '../assets/images/victoire/victoire-elephant.png';
       } else {
-        victoryMessage = `Bravo les Rhinos! ${potentialWinner.name} a gagné en poussant le rocher ${rock.name} !`;
         victoryImageUrl = '../assets/images/victoire/victoire-rhino.png';
       }
-
-      alert(victoryMessage);
-      console.log(`Fin de la partie. ${winner} a gagné.`);
-
       const victoryImage = document.createElement("img");
       victoryImage.src = victoryImageUrl;
       victoryImage.alt = "Image de victoire";
       victoryImage.style.width = "500px";
       victoryImage.style.height = "auto";
-
       const victoryContainer = document.getElementById("victory-container");
       if (victoryContainer) {
         victoryContainer.innerHTML = '';
         victoryContainer.appendChild(victoryImage);
       }
-
     } else {
-      console.log("Fin de la partie sans gagnant clair.");
+      console.log("match nul");
     }
   }
 
