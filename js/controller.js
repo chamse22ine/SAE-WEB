@@ -269,8 +269,7 @@ class GameController {
             this.model.lastMovedPiece = gameState.lastMovedPiece;
             this.piecePlacedThisTurn = gameState.piecePlacedThisTurn || false;
             if (this.piecePlacedThisTurn) {
-                console.log("La pièce a été posée mais le tour n'a pas été terminé. Passage au joueur adverse.");
-                this.terminerTour(); // Terminer le tour et passer la main à l'adversaire
+                this.terminerTour();
             }
             this.view.renderBoard(this.model.board, true);
             this.view.renderElephantsBanc(this.model.bancElephants);
@@ -289,7 +288,6 @@ class GameController {
         this.ajouterEvenement('Sauvegarde supprimée.');
         location.reload();
     }
-
 
 }
 document.addEventListener("keydown", (event) => {
