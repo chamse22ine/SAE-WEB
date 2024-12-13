@@ -14,7 +14,7 @@ body {
   align-items: center;
   background: linear-gradient(to bottom, #85c1e9, #d6eaf8);
 }
-#conteneur {
+.container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -22,7 +22,7 @@ body {
   background-repeat: no-repeat;
   background-position: center;
 }
-#global-container {
+.global-container {
   transform: scale(0.8);
 }
 
@@ -56,6 +56,7 @@ body {
 .case:hover {
   background-color: lightblue;
   box-shadow: 0 0 2px #000000;
+  cursor: pointer;
 }
 
 .controle {
@@ -80,17 +81,17 @@ body {
 #btn-important-container {
   margin-top: 15px;
   display: flex;
-  flex-direction: row; /* Boutons alignés verticalement */
-  align-items: center; /* Centre horizontalement */
-  gap: 15px; /* Ajoute de l'espace entre les boutons */
-  margin-bottom: 20px; /* Espace entre les boutons et les flèches */
+  flex-direction: row;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
 }
 
 #controle-orientation {
   display: flex;
-  flex-direction: row; /* Flèches alignées horizontalement */
-  justify-content: center; /* Centre les flèches horizontalement */
-  gap: 15px; /* Ajoute de l'espace entre les flèches */
+  flex-direction: row;
+  justify-content: center;
+  gap: 15px;
 }
 
 .btn-important {
@@ -101,11 +102,12 @@ body {
   padding: 10px 15px;
   border: none;
   border-radius: 5px;
-  text-align: center; /* Centrer le texte */
+  text-align: center;
 }
 
 .btn-important:hover {
-  background-color: darkred; /* Change la couleur au survol */
+  background-color: darkred;
+  cursor: pointer;
 }
 
 .btn-orientation {
@@ -123,7 +125,7 @@ body {
 }
 
 .orientation {
-  height: 25px; /* Taille ajustée des flèches */
+  height: 25px;
   width: 25px;
 }
 
@@ -257,7 +259,7 @@ body {
   background-color: rgba(255, 0, 0, 0.1);
   transition: background-color 0.3s ease, border 0.3s ease;
 }
-#joueur-actif {
+.joueur-actif {
   margin-bottom: 1vh;
   font-size: xx-large;
 }
