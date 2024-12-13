@@ -1,13 +1,16 @@
 class GameView {
+
     constructor(model) {
-        this.plateauElement = document.getElementById("plateau");
+        this.boardElement = document.getElementById("plateau");
         this.bancElephantsElement = document.getElementById("banc-elephants");
         this.bancRhinocerosElement = document.getElementById("banc-rhinoceros");
         this.model = model;
     }
+
     renderBoard(board, highlightEmpty = false) {
+        // Affiche le plateau de jeu en fonction de l'état du tableau
         console.log("Rendu de l'état du plateau :", board);
-        this.plateauElement.innerHTML = "";
+        this.boardElement.innerHTML = "";
         for (let row = 0; row < 5; row++) {
             for (let col = 0; col < 5; col++) {
                 const caseElement = document.createElement("div");
@@ -25,13 +28,39 @@ class GameView {
                 } else if (highlightEmpty) {
                     caseElement.classList.add("case-libre");
                 }
-                this.plateauElement.appendChild(caseElement);
+                this.boardElement.appendChild(caseElement);
             }
         }
         console.log("Plateau rendu avec succès.");
     }
 
+    renderElephantsBanc(bancElephants) {
+        // Affiche les pièces sur le banc des éléphants
+        this.bancElephantsElement.innerHTML = "";
+        bancElephants.forEach(elephant => {
+            const caseElement = document.createElement("div");
+            caseElement.classList.add("case");
+            caseElement.style.backgroundImage = `url('../assets/images/pieces/${elephant.type}.png')`;
+            caseElement.dataset.pieceName = elephant.name;
+            this.bancElephantsElement.appendChild(caseElement);
+        });
+    }
+
+    renderRhinocerosBanc(bancRhinoceros) {
+        // Affiche les pièces sur le banc des rhinocéros
+        this.bancRhinocerosElement.innerHTML = "";
+        bancRhinoceros.forEach(rhinoceros => {
+            const caseElement = document.createElement("div");
+            caseElement.classList.add("case");
+            caseElement.style.backgroundImage = `url('../assets/images/pieces/${rhinoceros.type}.png')`;
+            caseElement.dataset.pieceName = rhinoceros.name;
+            this.bancRhinocerosElement.appendChild(caseElement);
+        });
+    }
+
+
     highlightSelectablePieces(player) {
+        // Met en évidence les pièces sélectionnables pour le joueur a qui c'est au tour de jouer
         const allPieces = [...this.bancElephantsElement.children, ...this.bancRhinocerosElement.children];
         allPieces.forEach(piece => piece.classList.remove('piece-selectable'));
         if (player === "elephant") {
@@ -45,14 +74,11 @@ class GameView {
         }
     }
 
-    showMessage(message) {
-        console.log(message)
-    }
-
     highlightCasesLibres() {
+        // Met en évidence les cases libres sur le plateau
         for (let row = 0; row < 5; row++) {
             for (let col = 0; col < 5; col++) {
-                const caseElement = this.plateauElement.querySelector(`[data-row='${row}'][data-col='${col}']`);
+                const caseElement = this.boardElement.querySelector(`[data-row='${row}'][data-col='${col}']`);
                 if (caseElement) {
                     if (!this.model.getPieceAt(row, col)) {
                         caseElement.classList.add('case-libre');
@@ -64,46 +90,20 @@ class GameView {
         }
     }
 
-    renderElephantsBanc(bancElephants) {
-        this.bancElephantsElement.innerHTML = "";
-
-        bancElephants.forEach(elephant => {
-            const caseElement = document.createElement("div");
-            caseElement.classList.add("case");
-            caseElement.style.backgroundImage = `url('../assets/images/pieces/${elephant.type}.png')`;
-            caseElement.dataset.pieceName = elephant.name;
-            this.bancElephantsElement.appendChild(caseElement);
-        });
-    }
-
-    renderRhinocerosBanc(bancRhinoceros) {
-        this.bancRhinocerosElement.innerHTML = "";
-
-        bancRhinoceros.forEach(rhinoceros => {
-            const caseElement = document.createElement("div");
-            caseElement.classList.add("case");
-            caseElement.style.backgroundImage = `url('../assets/images/pieces/${rhinoceros.type}.png')`;
-            caseElement.dataset.pieceName = rhinoceros.name;
-            this.bancRhinocerosElement.appendChild(caseElement);
-        });
-    }
-
     highlightLastMovedPiece(pieceName) {
-        // Supprime la surbrillance de la pièce précédemment mise en évidence, si elle existe
-        const previousHighlight = this.plateauElement.querySelector('.highlight');
+        // Met en évidence la dernière pièce déplacée
+        const previousHighlight = this.boardElement.querySelector('.highlight');
         if (previousHighlight) {
             previousHighlight.classList.remove('highlight');
         }
-
-        // Ajoute la classe de surbrillance à la nouvelle pièce
-        const newHighlight = this.plateauElement.querySelector(`[data-piece-name='${pieceName}']`);
+        const newHighlight = this.boardElement.querySelector(`[data-piece-name='${pieceName}']`);
         if (newHighlight) {
             newHighlight.classList.add('highlight');
         }
     }
 
-
     renderPieceRotation(piece) {
+        // Actualise l'orientation d'une pièce
         if (this.bancElephantsElement) {
             const pieceElement = this.bancElephantsElement.querySelector(`[data-piece-name='${piece.name}']`);
             if (pieceElement) {
@@ -119,6 +119,7 @@ class GameView {
     }
 
     updateActivePlayer(player) {
+        // Met à jour le joueur actif affiché
         console.log(`Joueur actif : ${player}`);
         const playerDisplay = document.getElementById("nom-joueur-actif");
         if (playerDisplay) {
@@ -126,4 +127,7 @@ class GameView {
         }
     }
 
+    showMessage(message) {
+        console.log(message)
+    }
 }

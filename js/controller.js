@@ -31,7 +31,7 @@ class GameController {
             console.error("Le banc des rhinocéros n'a pas été trouvé.");
         }
 
-        this.view.plateauElement.addEventListener("click", (event) =>
+        this.view.boardElement.addEventListener("click", (event) =>
             this.handlePlateauClick(event),
         );
         document
@@ -152,7 +152,7 @@ class GameController {
                 console.log("Direction invalide");
                 return;
         }
-        const pieceElement = this.view.plateauElement.querySelector(
+        const pieceElement = this.view.boardElement.querySelector(
             `[data-piece-name='${this.selectedPiece.name}']`
         );
         if (pieceElement) {
@@ -164,11 +164,11 @@ class GameController {
     }
 
     highlightLastMovedPiece(pieceName) {
-        const previousHighlight = this.plateauElement.querySelector('.highlight');
+        const previousHighlight = this.boardElement.querySelector('.highlight');
         if (previousHighlight) {
             previousHighlight.classList.remove('highlight');
         }
-        const newHighlight = this.plateauElement.querySelector(`[data-piece-name='${pieceName}']`);
+        const newHighlight = this.boardElement.querySelector(`[data-piece-name='${pieceName}']`);
         if (newHighlight) {
             newHighlight.classList.add('highlight');
         }
