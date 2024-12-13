@@ -58,6 +58,11 @@ class GameController {
         document.getElementById("btn-effacer").addEventListener("click", () => {
             this.clearGameState();
         });
+        window.addEventListener("beforeunload", (event) => {
+            if (!this.skipAutoSave) {
+                this.saveGameState();
+            }
+        });
 
     }
 
@@ -245,6 +250,7 @@ class GameController {
             bancElephants: this.model.bancElephants,
             bancRhinoceros: this.model.bancRhinoceros,
             lastMovedPiece: this.model.lastMovedPiece,
+            piecePlacedThisTurn: this.piecePlacedThisTurn,
         };
         localStorage.setItem('Siam', JSON.stringify(gameState));
         this.ajouterEvenement('Partie sauvegardée.');
@@ -258,17 +264,19 @@ class GameController {
             this.model.turnCount = gameState.turnCount;
             this.model.currentPlayer = gameState.currentPlayer;
             this.model.board = gameState.board;
-            this.model.bancElephants = gameState.bancElephants.map(
-                piece => Object.assign(new Piece(), piece)
-            );
-            this.model.bancRhinoceros = gameState.bancRhinoceros.map(
-                piece => Object.assign(new Piece(), piece)
-            );
+            this.model.bancElephants = gameState.bancElephants.map(piece => Object.assign(new Piece(), piece));
+            this.model.bancRhinoceros = gameState.bancRhinoceros.map(piece => Object.assign(new Piece(), piece));
             this.model.lastMovedPiece = gameState.lastMovedPiece;
+            this.piecePlacedThisTurn = gameState.piecePlacedThisTurn || false;
+            if (this.piecePlacedThisTurn) {
+                console.log("La pièce a été posée mais le tour n'a pas été terminé. Passage au joueur adverse.");
+                this.terminerTour(); // Terminer le tour et passer la main à l'adversaire
+            }
             this.view.renderBoard(this.model.board, true);
             this.view.renderElephantsBanc(this.model.bancElephants);
             this.view.renderRhinocerosBanc(this.model.bancRhinoceros);
             this.view.updateActivePlayer(this.model.currentPlayer);
+            this.view.highlightSelectablePieces(this.model.currentPlayer);
         } else {
             console.log('Aucune sauvegarde trouvée.');
         }
@@ -276,6 +284,7 @@ class GameController {
 
     clearGameState() {
         // Supprimer la sauvegarde
+        this.skipAutoSave = true;
         localStorage.removeItem('Siam');
         this.ajouterEvenement('Sauvegarde supprimée.');
         location.reload();
