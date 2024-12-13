@@ -76,11 +76,6 @@ class GameModel {
     return this.currentPlayer;
   }
 
-  isGameStateValid() {
-    // Vérifie si l'état du jeu est valide
-    return true;
-  }
-
   getPieceAt(row, col) {
     // Retourne la pièce présente à une position donnée sur le plateau
     return this.board[row][col];
