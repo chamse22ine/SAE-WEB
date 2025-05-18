@@ -1,47 +1,69 @@
-# Siam
-Cahier des charges
-L'objectif est de créer une page web dynamique qui permet de jouer une partie du jeu Siam.
+# 🐘 Siam – Web Board Game
 
-Règles du jeu
-https://090c4d6b-0b5d-44fc-8506-c286659df2fd.filesusr.com/ugd/92ca7d_21a266c24b9a47acb695d974b94541b5.pdf
+**Siam** is a strategic 2-player board game involving elephants, rhinoceroses, and rocks. This web application is a dynamic implementation of the game, built using **vanilla JavaScript**, **HTML5**, and **CSS**.
 
-ressources graphiques
-http://www.biboun.com/portfolio/siam/
+## 📋 Game Overview
+
+Siam is a tactical game where players control elephants or rhinoceroses and try to push a rock off the board to win. This project faithfully recreates the physical game experience in the browser.
+
+## 🎮 Features
+
+- Dynamic display of the Siam board in its initial state
+- Turn-based gameplay with clear player indicators
+- Real-time piece movement and interaction
+- Highlighting of:
+  - Selectable pieces
+  - Valid move destinations
+  - Last moved piece
+- Reserve management for each player
+- Win condition detection and endgame handling
+- Ability to restart the game with a reset button
+
+## 🛠️ Technologies Used
+
+- JavaScript (ES6+)
+- HTML5
+- CSS3
+- Object-oriented programming and MVC structure
+
+## 📐 Project Architecture
+
+siam-game/
+├── index.html      # Main game page
+├── css/
+│   └── style.css   # Custom styles
+├── js/
+│   ├── model.js    # Game logic and rules
+│   ├── view.js     # UI rendering
+│   └── controller.js # Game interaction and flow
+└── img/            # Game pieces and board graphics
+
+## 🎨 Visual Resources
+
+The board and game pieces graphical representations are inspired by Biboun's artwork:
+[http://www.biboun.com/portfolio/siam/](http://www.biboun.com/portfolio/siam/)
+
+## 🎯 Game Rules
+
+1. **Objective**: Push a rock off the board to win
+2. **Turn Actions**: On each turn, a player can:
+   - Introduce a new piece onto the board
+   - Move an existing piece
+   - Change a piece's orientation
+3. **Pushing**: Pieces can push other pieces if:
+   - They are oriented in the pushing direction
+   - The total pushing force exceeds the resistance
+
+## 🚀 Installation and Setup
+
+1. Clone this repository
+2. Open `index.html` in your browser
+3. Enjoy the game!
 
 
-Fonctionnement de l'application
-Jeu Siam
-la page du jeu:
+## 📜 License
 
-affiche le plateau dans sa position de départ
-indique le joueur dont c'est le tour
-affiche le nombre de pièces en réserve pour chaque joueur
-met en évidence la dernière pièce à avoir été déplacée
-propose au joueur actif de sélectionner une pièce du plateau ou de la réserve (toutes mises en évidence)
-une fois la pièce sélectionnée, lui propose de cliquer sur une des zones de destination possibles et mises en évidence, ou d'annuler la sélection initiale pour revenir à l'étape précédente. met à jour la position et passe la main à l'adversaire
-ajouter un bouton qui permet de réinitialiser le plateau et de recommencer la partie
-il faut bien sûr tester les conditions de victoire et détecter la fin de partie!
+This project is intended for learning and demonstration purposes. All game graphics remain the property of their original creators.
 
+---
 
-
-Quelques conseils
-le plateau est constitué d'une div avec un positionnement relatif et l'image du plateau en image de fond
-les zones cliquables sont des divs positionnées en absolute par rapport au plateau. elles peuvent contenir l'image des pièces, imbriquées dans la div ou en image de fond, et posséder une ou plusieurs classes qui permettent d'identifier ces zones. exemple:
-.clCliquable {border: green dashed 2px; border-radius: 4px;}
-.clSurvol {border: yellow dashed 2px; border-radius: 4px;}
-.clSelection {border: red dashed 2px; border-radius: 4px;}
-pas de tableau html pour l'affichage du plateau, ce n'est pas fait pour ça!
-Tout est géré en javascript dans la même page, on ne sauvegarde rien, il faut donc éviter de rafraîchir la page sinon on perdra la partie en cours.
-lisez bien les règles du jeu, au besoin faites quelques parties en ligne (boardgamearena.com); l'implémentation correcte des règles fera partie des éléments évalués.
-Contraintes techniques
-L'application devra utiliser les technologies suivantes :
-
-Modele MVC: structurer l'application pour bien séparer les parties Modele - Vue - Controleurs
-utilisations de classes d'objets pour les éléments constitutifs du jeu
-JavaScript natif + HTML5 + CSS (bootstrap autorisé)
-Toute utilisation d'une bibliothèque/API/framework annexe devra être validée au préalable par l'enseignant (ou si vous voulez gagner du temps: la réponse est non)
-
-Infos pratiques
-Date de rendu du projet : 13 décembre, sous forme d'un zip comprenant la page et toutes les ressources nécessaires (scripts, images)
-Projet à réaliser en binôme, sauf autorisation explicite
-composition des binômes à me communiquer par mail avant le 31 octobre
