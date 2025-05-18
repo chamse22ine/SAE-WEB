@@ -27,7 +27,7 @@ Siam is a tactical game where players control elephants or rhinoceroses and try 
 - Object-oriented programming and MVC structure
 
 ## 📐 Project Architecture
-
+```
 siam-game/
 ├── index.html      # Main game page
 ├── css/
@@ -37,7 +37,7 @@ siam-game/
 │   ├── view.js     # UI rendering
 │   └── controller.js # Game interaction and flow
 └── img/            # Game pieces and board graphics
-
+```
 ## 🎨 Visual Resources
 
 The board and game pieces graphical representations are inspired by Biboun's artwork:
